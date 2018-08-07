@@ -1,0 +1,27 @@
+body {
+	
+	overflow: scroll;
+	
+	min-height: 100vh;
+
+	background-color: #CCC;
+	background-image: url('https://unsplash.it/g/1600/900?random');
+}
+
+.formulario-login {
+	margin-top: 20vh;
+	padding: 20px 30px;
+	background-color: rgba(0, 0, 0, .9);
+	color: #FFF;
+
+	transform: translateY(-50%, length);
+}
+
+.formulario-login h1 {
+	margin: 0 0 5px;
+}
+
+.formulario-login h2 {
+	margin: 0 0 30px;
+	font-size: 1em; /*1em = Pega tamanho fonte do pai*/
+}

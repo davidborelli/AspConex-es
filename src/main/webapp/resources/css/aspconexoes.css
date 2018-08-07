@@ -1,0 +1,39 @@
+.row.cabecalho {
+	margin-bottom: 20px;
+}
+
+#btnExcluir {
+    margin: 0px;
+    padding-left: 3px;
+}
+
+#btnEditar {
+    margin: 0px;
+    padding: 0px;
+}
+
+a.lblTitleNomeMuni:link {
+	text-decoration: none;
+}
+
+td.tituloMuni {
+    padding: 0px;
+    width: 100%;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #f5f5f5;
+}
+
+/* .text-center {
+    text-align: center;
+    background: #e0e0e0;
+} */
+
+body {
+	overflow: scroll;
+}
