@@ -1,8 +1,12 @@
 package br.com.aspconexoes.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +16,7 @@ import br.com.aspconexoes.daos.GrupoDAO;
 import br.com.aspconexoes.daos.UsuarioDAO;
 import br.com.aspconexoes.models.Setor;
 import br.com.aspconexoes.models.Usuario;
+import br.com.aspconexoes.validation.UsuarioValidator;
 
 @Controller
 @RequestMapping("/usuarios")
@@ -22,6 +27,11 @@ public class UsuarioController {
 	
 	@Autowired
 	private GrupoDAO grupoDao;
+	
+	@InitBinder
+	public void InitBinder(WebDataBinder binder) {
+		binder.addValidators(new UsuarioValidator());
+	}
 	
 	@RequestMapping("/cadastro")
 	public ModelAndView cadastrar(Usuario usuario) {
@@ -34,7 +44,7 @@ public class UsuarioController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ModelAndView gravar(Usuario usuario, BindingResult result, RedirectAttributes attributes) {	
+	public ModelAndView gravar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {	
 		
 		if(result.hasErrors()) {
 			return cadastrar(usuario);

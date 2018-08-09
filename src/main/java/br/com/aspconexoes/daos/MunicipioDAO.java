@@ -18,19 +18,21 @@ public class MunicipioDAO {
 	private EntityManager manager;
 	
 	public void salvar(Municipio municipio) {
-		manager.persist(municipio);
+		
+		if(municipio.getId() == null) {
+			manager.persist(municipio);
+		} else {
+			manager.merge(municipio);
+		}		
 	}
 	
-	public Municipio buscarPorId(int id) {
-		return manager.createQuery("select distinct(m) from Municipio m join fetch m.conexoes conexoes where m.id = :id",
+	public Municipio buscarPorId(Long id) {
+		return manager.createQuery("select m from Municipio m where m.id = :id",
 				Municipio.class).setParameter("id", id).getSingleResult();
 	}
 	
 	public List<Municipio> listarTodos(){
-		//String jpql = "select m from Municipio m";
 		return manager.createQuery("select m from Municipio m order by m.nome", Municipio.class).getResultList();
-		//Query query = manager.createQuery(jpql); 
-		//return query.getResultList();
 	}
 
 	public List<Municipio> buscaPorNome(Municipio municipio) {
@@ -38,6 +40,11 @@ public class MunicipioDAO {
 	}
 	
 	public List<Municipio> buscaConexoesAtivas(){
-		return manager.createQuery("select m from Municipio m where m.ativo = :pAtivo", Municipio.class).setParameter("pAtivo", true).getResultList();
+		return manager.createQuery("select m from Municipio m where m.ativo = :pAtivo order by m.nome", Municipio.class).setParameter("pAtivo", true).getResultList();
 	}
+	
+	public void excluir(Municipio municipio) {
+		manager.remove(municipio);
+	}
+	
 }

@@ -15,14 +15,13 @@ public class Usuario implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long codigo;
+	
 	private String email;
 	private String nome;
 	private String setor;
 	private String senha;
 	private Boolean ativo;
-
-	private Integer grupo;
-	
+	private Integer grupo;	
 	
 	public Usuario() {
 		

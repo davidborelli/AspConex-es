@@ -2,10 +2,14 @@ package br.com.aspconexoes.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +21,7 @@ import br.com.aspconexoes.daos.MunicipioDAO;
 import br.com.aspconexoes.models.Conexao;
 import br.com.aspconexoes.models.Municipio;
 import br.com.aspconexoes.models.TipoConexao;
+import br.com.aspconexoes.validation.ConexaoValidator;
 
 @Controller
 @RequestMapping("/conexoes")
@@ -27,6 +32,11 @@ public class ConexoesController {
 	
 	@Autowired
 	private ConexaoDAO conexaoDao;
+	
+	@InitBinder
+	public void InitBinder(WebDataBinder binder) {
+		binder.addValidators(new ConexaoValidator());
+	}
 	
 	@RequestMapping("/cadastro")
 	public ModelAndView form(Conexao conexao) {		
@@ -42,8 +52,14 @@ public class ConexoesController {
 	
 	@RequestMapping(method=RequestMethod.POST)
 	@CacheEvict(value = "conexoesHome", allEntries = true)
-	public ModelAndView gravar(Conexao conexao, BindingResult result, RedirectAttributes attributes) {
+	public ModelAndView gravar(@Valid Conexao conexao, BindingResult result, RedirectAttributes attributes) {
+		
+		if(result.hasErrors()) {
+			return form(conexao);
+		}
+		
 		conexaoDao.salvar(conexao);
+		
 		return new ModelAndView("redirect:/conexoes/cadastro");
 	}
 	
@@ -68,8 +84,12 @@ public class ConexoesController {
 	
 	@RequestMapping(value="/editar", method=RequestMethod.POST)
 	@CacheEvict(value = "conexoesHome", allEntries = true)
-	public ModelAndView editar(Conexao conexao) {
+	public ModelAndView editar(@Valid Conexao conexao, BindingResult result, RedirectAttributes attributes) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/");
+		
+		if(result.hasErrors()) {
+			return form(conexao);
+		}
 		
 		conexaoDao.salvar(conexao);
 		

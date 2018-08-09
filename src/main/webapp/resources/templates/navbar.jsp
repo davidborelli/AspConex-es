@@ -19,24 +19,24 @@
 			</a>
 		</div>
 		<div class="collapse navbar-collapse" id="menu">
-			<security:authorize access="hasRole('ROLE_ADMINISTRADOR')"> <!-- isAuthenticated() -->
 				<ul class="nav navbar-nav">
 					<li><a href="${contextPath}">Conexões</a></li>
-					<li><a href="${contextPath}">Municípios</a></li>
-					<li><a href="${contextPath}">Usuários</a></li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">					 
-						Cadastros 
-						<span class="caret"></span> 						
-						</a>
-						<ul class="dropdown-menu"> 
-							<li><a href="${s:mvcUrl('CC#form').build()}">Conexões</a></li> 
-							<li><a href="${s:mvcUrl('MC#form').build()}">Municípios</a></li>  
-							<li><a href="${s:mvcUrl('UC#cadastrar').build()}">Usuário</a></li> 
-						</ul>
-					</li>							
+					<li><a href="${s:mvcUrl('MC#listarTodosMunicipios').build()}">Municípios</a></li>
+					<security:authorize access="hasRole('ROLE_ADMINISTRADOR')"> <!-- isAuthenticated() -->
+						<li><a href="${contextPath}">Usuários</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">					 
+							Cadastros 
+							<span class="caret"></span> 						
+							</a>
+							<ul class="dropdown-menu"> 
+								<li><a href="${s:mvcUrl('CC#form').build()}">Conexão</a></li> 
+								<li><a href="${s:mvcUrl('MC#form').build()}">Municípios</a></li>  
+								<li><a href="${s:mvcUrl('UC#cadastrar').build()}">Usuário</a></li> 
+							</ul>
+						</li>							
+					</security:authorize>
 				</ul>
-			</security:authorize>
 			
 			<ul class="nav navbar-nav navbar-right">
 				<li>

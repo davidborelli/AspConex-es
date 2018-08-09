@@ -11,7 +11,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>AspConexões | Inserir município</title>
+	<title>AspConexões | Cadastrar município</title>
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/index.css">
@@ -24,38 +24,29 @@
 	<div class="container">
 		<ol class="breadcrumb">
 			<li><a href="<%=request.getContextPath()%>/">Início</a></li>
-			<li><a href="${contextPath}">Municípios</a></li>
-			<li class="active">Inserir município</li>
+			<li class="active">Cadastros</li>
+			<li class="active">Município</li>
 		</ol>
 		
 		<div class="container">
 			<div class="page-header">
-				<h1>Inserir município</h1>
+				<h1>Cadastrar município</h1>
 			</div>
 			
 			<form:form action="${s:mvcUrl('MC#gravar').build()}" method="post" commandName="municipio">
 			
-				<div class="form-group">
-					<div class="col-sm-offset-2  com-sm-10">
-						<ul>
-							<c:forEach items="${erros}" var="msg">
-								<li class="erro">${msg}</li>
-							</c:forEach>
-						</ul>
-					</div>
-				</div>
-			
-			
-				<div class="form-group">
-					<label class="col-sm-2 control-label" for="nome">Nome</label>
+				<div class="row form-group">
+					<label class="col-sm-1 control-label" for="nome">Nome</label>
 					<div class="col-sm-5">
-						<form:input path="nome" cssClass="form-control" />	
+						<form:hidden path="id" value="${municipio.id}" />	
+						<form:input path="nome" cssClass="form-control" />
+						<form:errors path="nome" cssClass="erro"  />
+					</div>	
+					<div class="radio col-sm-5">
+						<label><input type="radio" name="ativo" id="ativo" value="true" <c:if test="${municipio.ativo == true}">checked="checked"</c:if>>Ativo</label>	
+						<label><input type="radio" name="ativo" id="inativo" value="false" <c:if test="${municipio.ativo == false}">checked="checked"</c:if>>Inativo</label>
 					</div>	
 				</div>
-				<div class="radio">
-					<label><input type="radio" name="ativo" id="ativo" value="true" checked="checked">Ativo</label>	
-					<label><input type="radio" name="ativo" id="inativo" value="false">Inativo</label>
-				</div>	
 				
 				<footer class="row  rodape">
 					<div class="col-sm-6">

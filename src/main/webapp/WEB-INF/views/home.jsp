@@ -77,8 +77,8 @@
 									<tr>
 										<th class="text-center">Tipo</th>
 										<th class="text-center">ID | IP</th>
-										<th class="text-center">Porta</th>
 										<th class="text-center">Usuário</th>
+										<th class="text-center">Porta</th>
 										<th class="text-center">Senha</th>
 										<security:authorize access="hasRole('ROLE_ADMIN')"> <!-- isAuthenticated() -->
 											<th class="text-center"></th>
@@ -91,8 +91,8 @@
 										<tr>
 											<td class="text-center">${conexao.tipo.descricao}</td>
 											<td class="text-center">${conexao.id_ip}</td>
-											<td class="text-center">${conexao.porta}</td>
 											<td class="text-center">${conexao.usuario}</td>
+											<td class="text-center">${conexao.porta}</td>
 											<td class="text-center">${conexao.senha}</td>	
 											<security:authorize access="hasRole('ROLE_ADMINISTRADOR')"> <!-- isAuthenticated() -->
 												<td>

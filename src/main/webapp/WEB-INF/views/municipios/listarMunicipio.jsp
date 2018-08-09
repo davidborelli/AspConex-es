@@ -1,82 +1,100 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>AspConexões | Municípios</title>
-
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css">
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/index.css">
+	<title>AspConexões | Todos municípios</title>
+	
+	<!-- Criando uma variável -->
+	<c:url value="/resources/css" var="cssPath" />
+	<c:url value="/municipios/buscaPorNome" var="buscaPorNome" />
+	
+	<link rel="stylesheet" href="${cssPath}/bootstrap.min.css">
+	<link rel="stylesheet" href="${cssPath}/index.css">
+	<link rel="stylesheet" href="${cssPath}/aspconexoes.css">
+	
 </head>
 <body>
 	<jsp:include page="/resources/templates/navbar.jsp" />
 
 	<div class="container">
 		<ol class="breadcrumb">
-			<li><a href="<%=request.getContextPath()%>/">Início</a></li>
+			<li><a href="">Início</a></li>
 			<li class="active">Municípios</li>
 			<!-- <li class="active">Pesquisa</li> -->
 		</ol>
 
-		<div class="container">
-			<h1>Municípios</h1>			
-			<div class="col-xs-12 col-md-4 col-md-offset-8 busca">
-				<form action="<%=request.getContextPath()%>/municipios/filtrar">
+		<div class="row cabecalho">
+			<div class="col-xs-12 col-md-6">
+				<h1>Lista de municípios</h1>
+			</div>
+			<div class="col-xs-12 col-md-4 col-md-offset-2 busca">
+				<form:form action="${s:mvcUrl('MC#buscaPorNome').build()}" method="POST" commandName="municipio">
 					<div class="input-group">
-						<input type="text" name="busca" class="form-control" placeholder="Pesquisar por nome do município">
+						<form:input path="nome" cssClass="form-control" placeholder="Pesquisar por nome do município" />
 						<span class="input-group-btn">
 							<button type="submit" class="btn btn-default">
 								<span class="glyphicon glyphicon-search"></span>
 							</button>
 						</span>
 					</div>
-				</form>
+				</form:form>
 			</div>
 		</div>
-	
-		<div class="table-responsive">
-			<table class="dados-os table table-striped table-bordered table-hover">
-				<thead>
-					<tr>
-						<th>Código</th>
-						<th>Nome</th>
-						<th>Ativo</th>
-						<th></th>
-					</tr>
-				</thead>
-				
-				<tbody>
-					<c:forEach items="${itens}" var="x">
-						<tr <c:if test="${x.ativo == false}">class="danger"</c:if>>
-							<td>${x.id}</td>
-							<td>${x.nome}</td>
-							<td>
-								<c:if test="${x.ativo == false}">Inativo</c:if>
-								<c:if test="${x.ativo == true}">Ativo</c:if>
-							</td>
-							<td class="text-center">
-							<a href="<%=request.getContextPath()%>/municipios/editar?cod=${x.id}" data-toggle="tooltip" title="Editar"><span class="glyphicon glyphicon-pencil text-warning"></span></a>
-							<a href="<%=request.getContextPath()%>/municipios/remover?cod=${x.id}" data-toggle="tooltip" title="Excluir"><span class="glyphicon glyphicon-trash text-danger"></span></a>
-						</td>
-						</tr>					
-					</c:forEach>
-				</tbody>
-			</table>
-		</div>
-		<footer class="row">
-			<div class="col-sm-6">
-				<form action="<%=request.getContextPath()%>/municipio/inserir">
-					<button class="btn btn-primary" type="submit">Novo Município</button>
-					<a href="<%=request.getContextPath()%>/" class="btn btn-default">Voltar</a>
-				</form>
-			</div>
+	</div>
+		
+	<div class="container">
+		<!-- Opcao com colapse -->
+		<div class="panel-group">
+			<c:forEach items="${municipios}" var="municipio" varStatus="status">
+				<div <c:if test="${municipio.ativo == false}">class="panel panel-danger"</c:if>
+					 <c:if test="${municipio.ativo == true}">class="panel panel-default"</c:if>>
+					<div class="panel-heading">
+						<div class="panel-title">
+							<table>
+							   <tr>
+								   <td class="tituloMuni">${municipio.nome}</td>
+								   <security:authorize access="hasRole('ROLE_ADMINISTRADOR')"> <!-- isAuthenticated() -->
+										<td>
+											<div class="text-right">
+												<form:form action="${s:mvcUrl('MC#formEditar').arg(0,municipio.id).build()}" method="POST">
+													<button type="submit" class="btn btn-default  btn-xs">
+														<span class="glyphicon glyphicon-pencil"></span>
+													</button>
+												</form:form>
+											</div>
+										</td>		
+										<td>
+											<div class="text-left">
+												<form:form action="${s:mvcUrl('MC#exclusao').arg(0,municipio.id).build()}" method="POST">
+													<button type="submit" class="btn btn-default  btn-xs">
+														<span class="glyphicon glyphicon-trash"></span>
+													</button>
+												</form:form>
+											</div>
+										</td>
+									</security:authorize>
+								   <td class="tituloMuni  text-right">0/${municipio.conexoes.size()}</td>
+							   </tr>
+							</table>
+						</div>
+					</div>
+  				</div>
+			</c:forEach>
+		</div>			
+			
+		<div class="row">
 			<div class="col-sm-6 paginacao text-right">
 				<ul class="pagination">
-					<li class="disabled"><a href=""><span><<</span></a></li>
+					<li class="disabled"><a href=""><span> << </span></a></li>
 					<li class="active"><a href=""><span>1</span></a></li>
 					<li><a href=""><span>2</span></a></li>
 					<li><a href=""><span>3</span></a></li>
@@ -85,10 +103,15 @@
 					<li><a href=""><span>>></span></a></li>
 				</ul>
 			</div>
-		</footer>
+		</div>
 	</div>
-  
-
+  	
+	<footer class="page-footer">	
+		<div class="footer-copyright text-center">© 2018 Copyright:
+	    	<a href="http://grupoassessor.com/fallow/davidborelli"> David Borelli</a>
+	    </div>	
+	</footer>
+	
 	<script src="<%=request.getContextPath()%>/resources/js/jquery-1.12.3.min.js"></script>
 	<script src="<%=request.getContextPath()%>/resources/js/bootstrap.min.js"></script>
 	<script src="<%=request.getContextPath()%>/resources/js/main.js"></script>

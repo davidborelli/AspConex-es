@@ -10,7 +10,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>AspConexões | Inserir usuário</title>
+	<title>AspConexões | Cadastrar usuário</title>
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/index.css">
@@ -23,21 +23,21 @@
 	<div class="container">
 		<ol class="breadcrumb">
 			<li><a href="${contextPath}">Início</a></li>
-			<li><a href="${contextPath}">Cadastros</a></li>
-			<li class="active">Inserir usuário</li>
+			<li class="active">Cadastros</li>
+			<li class="active">Usuário</li>
 		</ol>
 		
 		<div class="page-header">
-			<h1>Inserir usuário</h1>
+			<h1>Cadastrar usuário</h1>
 		</div>
 		
-		<form:form action="${s:mvcUrl('UC#gravar').build()}" method="post" commandName="usuario">
+		<form:form action="${s:mvcUrl('UC#gravar').build()}" method="post" commandName="usuario" autocomplete="off">
 		
 			<div class="form-group">
 				<div class="col-sm-offset-2  com-sm-10">
 					<ul>
-						<c:forEach items="${erros}" var="msg">
-							<li class="erro">${msg}</li>
+						<c:forEach items="${msgErrors}" var="msg">
+							<li class="erro">${msg.getDefaultMessage()}</li>
 						</c:forEach>
 					</ul>
 				</div>
@@ -48,19 +48,22 @@
 			
 				<div class="col-sm-12">
 					<label for="nome" class="control-label">Nome</label>
-					<form:input path="nome" cssClass="form-control "/>				
+					<form:input path="nome" cssClass="form-control "/>	
+					<form:errors path="nome" cssClass="erro" />			
 				</div>			
 			</div>
 			
 			<div class="row  form-group">
 				<div class="col-sm-5">
 					<label for="email" class="control-label">E-mail</label>
-					<form:input path="email" cssClass="form-control" autocomplete="false"/>
+					<form:input path="email" cssClass="form-control" autocomplete="off"/>
+					<form:errors path="email" cssClass="erro" />
 				</div>				
 					
 				<div class="col-sm-5" >	
 					<label class="control-label" for="senha">Senha</label>
-					<form:input type="password" path="senha" cssClass="form-control" autocomplete="false"/>	
+					<form:input type="password" path="senha" cssClass="form-control" autocomplete="off"/>	
+					<form:errors path="senha" cssClass="erro" />
 				</div>				
 			</div>
 			
@@ -73,6 +76,7 @@
 							<form:option value="${setor}" >${setor.descricao}</form:option>
 						</c:forEach>	
 					</form:select>
+					<form:errors path="setor" cssClass="erro" />
 				</div>				
 			</div>
 			
@@ -92,6 +96,7 @@
 							<label for="grupo_${status.index}">${grupoFe.nome}</label>
 						</c:forEach>
 					</div>
+					<form:errors path="grupo" cssClass="erro" />
 				</div>
 			</div>
 			

@@ -18,14 +18,14 @@ public class Conexao implements Serializable {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String senha;	
-	private Integer porta;	
+	private Integer porta;
 	private String id_ip;
 	private String usuario;
+	private Boolean ativo;
 	
 	@Enumerated(EnumType.STRING)
 	private TipoConexao tipo;
 	
-	//@JoinColumn(name="municipio")
 	@ManyToOne
 	private Municipio municipio;	
 
@@ -87,6 +87,20 @@ public class Conexao implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}	
+
+	public Boolean getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	@Override
+	public String toString() {
+		return "Conexao [id=" + id + ", senha=" + senha + ", porta=" + porta + ", id_ip=" + id_ip + ", usuario="
+				+ usuario + ", tipo=" + tipo + ", municipio=" + municipio + "]";
 	}
 
 	@Override
@@ -113,10 +127,5 @@ public class Conexao implements Serializable {
 			return false;
 		return true;
 	}
-
-	@Override
-	public String toString() {
-		return "Conexao [id=" + id + ", senha=" + senha + ", porta=" + porta + ", id_ip=" + id_ip + ", usuario="
-				+ usuario + ", tipo=" + tipo + ", municipio=" + municipio + "]";
-	}		
+	
 }

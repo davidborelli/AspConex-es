@@ -10,7 +10,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>AspConexões | Inserir município</title>
+	<title>AspConexões | Cadastrar conexão</title>
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/index.css">
@@ -22,13 +22,13 @@
 
 	<div class="container">
 		<ol class="breadcrumb">
-			<li><a href="<%=request.getContextPath()%>/">Início</a></li>
-			<li><a href="${contextPath}">Municípios</a></li>
-			<li class="active">Inserir município</li>
+			<li><a href="${contextPath}">Início</a></li>
+			<li class="active">Cadastros</li>
+			<li class="active">Conexão</li>
 		</ol>
 		
 		<div class="page-header">
-			<h1>Inserir município</h1>
+			<h1>Cadastrar Conexão</h1>
 		</div>
 		
 		<form:form action="${s:mvcUrl('CC#gravar').build()}" method="post" commandName="conexao">
@@ -47,11 +47,12 @@
 				<div class="col-sm-3  form-group">
 					<label for="municipio" class="control-label">Município</label>
 					<form:select path="municipio.id" cssClass="form-control">
-						<option value="">Selecione o Municipio...</option>
+						<option value=" ">Selecione o Municipio...</option>
 						<c:forEach items="${municipios}" var="municipio" >
 							<form:option value="${municipio.id}" >${municipio.nome}</form:option>
 						</c:forEach>	
 					</form:select>
+					<form:errors path="municipio.id" cssClass="erro"  />
 				</div>	
 			
 				<div class="col-sm-2  form-group">
@@ -62,6 +63,7 @@
 							<form:option value="${tipo}">${tipo.descricao}</form:option>
 						</c:forEach>
 					</form:select>
+					<form:errors path="tipo" cssClass="erro"  />
 				</div>			
 			</div>
 		
@@ -70,6 +72,7 @@
 				<div class="col-sm-5">
 					<label for="id_ip" class="control-label">ID / IP</label>
 					<form:input path="id_ip" cssClass="form-control" />
+					<form:errors path="id_ip" cssClass="erro" />
 				</div>
 				<div class="col-sm-2">	
 					<label class="control-label" for="porta">Porta</label>
@@ -80,7 +83,7 @@
 			<div class="row  form-group">
 				<div class="col-sm-5">
 					<label for="usuario" class="control-label">Usuário</label>
-					<form:input path="usuario" cssClass="form-control "/>				
+					<form:input path="usuario" cssClass="form-control "/>
 				</div>
 				
 				<div class="col-sm-5" >	

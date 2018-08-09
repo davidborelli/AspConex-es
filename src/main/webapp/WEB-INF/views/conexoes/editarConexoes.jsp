@@ -92,8 +92,8 @@
 			
 			<div class="row  form-group">
 				<div class="radio  col-sm-2">
-					<label><input type="radio" name="ativo" id="ativo" value="true" checked="checked">Ativo</label>	
-					<label><input type="radio" name="ativo" id="inativo" value="false">Inativo</label>
+					<label><input type="radio" name="ativo" id="ativo" value="true" <c:if test="${conexao.ativo == true}">checked="checked"</c:if>>Ativo</label>	
+					<label><input type="radio" name="ativo" id="inativo" value="false" <c:if test="${conexao.ativo == false}">checked="checked"</c:if>>Inativo</label>
 				</div>
 			</div>			
 			
