@@ -23,7 +23,7 @@
 					<li><a href="${contextPath}">Conexões</a></li>
 					<li><a href="${s:mvcUrl('MC#listarTodosMunicipios').build()}">Municípios</a></li>
 					<security:authorize access="hasRole('ROLE_ADMINISTRADOR')"> <!-- isAuthenticated() -->
-						<li><a href="${contextPath}">Usuários</a></li>
+						<li><a href="${s:mvcUrl('UC#listarTodosUsuarios').build()}">Usuários</a></li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">					 
 							Cadastros 

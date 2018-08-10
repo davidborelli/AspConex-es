@@ -40,5 +40,10 @@ public class UsuarioDAO {
 		List<Usuario> usuarios = manager.createQuery("select u from Usuario u where email = :pEmail", Usuario.class).setParameter("pEmail", email).getResultList();
 		return usuarios;
 	}
+
+	public List<Usuario> buscarPorNome(Usuario usuario) {
+		List<Usuario> usuarios = manager.createQuery("select u from Usuario u where nome like :pNome", Usuario.class).setParameter("pNome", "%"+usuario.getNome()+"%").getResultList();
+		return usuarios;
+	}
 	
 }

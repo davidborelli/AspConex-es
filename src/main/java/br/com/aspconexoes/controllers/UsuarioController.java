@@ -54,4 +54,20 @@ public class UsuarioController {
 		
 		return new ModelAndView("redirect:/usuarios/cadastro");
 	}
+	
+	@RequestMapping(value="/listar")
+	public ModelAndView listarTodosUsuarios(Usuario usuario) {
+		ModelAndView modelAndView = new ModelAndView("usuarios/listarUsuarios");
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping("buscarPorNome")
+	public ModelAndView buscarPorNome(Usuario usuario) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		usuarioDAO.buscarPorNome(usuario);
+		
+		return modelAndView;
+	}
 }

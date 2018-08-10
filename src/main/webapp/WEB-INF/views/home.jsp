@@ -37,9 +37,9 @@
 				<h1>Conexões</h1>
 			</div>
 			<div class="col-xs-12 col-md-4 col-md-offset-2 busca">
-				<form:form action="${buscaPorNome}" method="POST" commandName="municipio">
+				<form:form action="${s:mvcUrl('MC#hbuscaPorNome').build()}" method="POST" commandName="municipio">
 					<div class="input-group">
-						<form:input path="nome" cssClass="form-control" placeholder="Pesquisar por nome do cliente" />
+						<form:input path="nome" cssClass="form-control" placeholder="Pesquisar por nome do município" />
 						<span class="input-group-btn">
 							<button type="submit" class="btn btn-default">
 								<span class="glyphicon glyphicon-search"></span>

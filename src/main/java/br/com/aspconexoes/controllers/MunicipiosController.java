@@ -73,6 +73,16 @@ public class MunicipiosController {
 		return modelAndView;
 	}
 	
+	@RequestMapping(value="/hbuscaPorNome" ,method=RequestMethod.POST)
+	public ModelAndView hbuscaPorNome(Municipio municipio) {
+		ModelAndView modelAndView = new ModelAndView("home");
+		
+		List<Municipio> municipiosPorNome =  municipioDao.buscaPorNome(municipio);
+		modelAndView.addObject("municipios", municipiosPorNome);
+		
+		return modelAndView;
+	}
+	
 	@RequestMapping("/editar/{id}")
 	public ModelAndView formEditar(@PathVariable("id") Long id ) {
 		ModelAndView modelAndView = new ModelAndView("municipios/inserirMunicipio");
