@@ -24,16 +24,18 @@ public class UsuarioDAO {
 	
 	public void salvar(Usuario usuario) {
 		
-		List<Usuario> usuarioExistente = buscarPorEmail(usuario.getEmail());
-		
-		
-		if(!usuarioExistente.isEmpty()) {
-			throw new RuntimeException("Já existe um usuário cadastrado com esse e-mail");
-		}
-		
-		usuario.setSenha(this.passwordEncoder.encode(usuario.getSenha()));
-		
-		manager.persist(usuario);
+		if(usuario.getCodigo() == null) {
+			List<Usuario> usuarioExistente = buscarPorEmail(usuario.getEmail());
+			
+			if(!usuarioExistente.isEmpty()) {
+				throw new RuntimeException("Já existe um usuário cadastrado com esse e-mail");
+			}
+			usuario.setSenha(this.passwordEncoder.encode(usuario.getSenha()));
+			manager.persist(usuario);			
+		} else {
+			usuario.setSenha(this.passwordEncoder.encode(usuario.getSenha()));
+			manager.merge(usuario);
+		}		
 	}
 	
 	public List<Usuario> buscarPorEmail(String email) {
@@ -42,8 +44,22 @@ public class UsuarioDAO {
 	}
 
 	public List<Usuario> buscarPorNome(Usuario usuario) {
-		List<Usuario> usuarios = manager.createQuery("select u from Usuario u where nome like :pNome", Usuario.class).setParameter("pNome", "%"+usuario.getNome()+"%").getResultList();
+		List<Usuario> usuarios = manager.createQuery("select u from Usuario u where u.nome like :pNome", Usuario.class).setParameter("pNome", "%"+usuario.getNome()+"%").getResultList();
+		System.out.println(usuario);
 		return usuarios;
+	}
+	
+	public List<Usuario> buscarTodos(){
+		return manager.createQuery("select u from Usuario u", Usuario.class).getResultList();
+	}
+	
+	public Usuario buscaPorId(Long id) {
+		Usuario usuario = manager.createQuery("select u from Usuario u where u.codigo = :pId", Usuario.class).setParameter("pId", id).getSingleResult();
+		return usuario;
+	}
+	
+	public void excluir(Usuario usuario) {
+		manager.remove(usuario);
 	}
 	
 }

@@ -32,16 +32,6 @@
 		</div>
 		
 		<form:form action="${s:mvcUrl('CC#editar').build()}" method="post" commandName="conexao">
-		
-			<div class="form-group">
-				<div class="col-sm-offset-2  com-sm-10">
-					<ul>
-						<c:forEach items="${erros}" var="msg">
-							<li class="erro">${msg}</li>
-						</c:forEach>
-					</ul>
-				</div>
-			</div>
 			
 			<div class="row  form-group">
 				<div class="col-sm-3  form-group">

@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -10,7 +11,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>AspConexões | Inserir usuário</title>
+	<title>AspConexões | Editar usuário</title>
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/index.css">
@@ -23,12 +24,12 @@
 	<div class="container">
 		<ol class="breadcrumb">
 			<li><a href="${contextPath}">Início</a></li>
-			<li class="active">Inserir</li>
+			<li class="active">Editar</li>
 			<li class="active">Usuário</li>
 		</ol>
 		
 		<div class="page-header">
-			<h1>Inserir usuário</h1>
+			<h1>Editar usuário</h1>
 		</div>
 		
 		<form:form action="${s:mvcUrl('UC#gravar').build()}" method="post" commandName="usuario" autocomplete="off">
@@ -38,7 +39,7 @@
 				<div class="col-sm-12">
 					<label for="nome" class="control-label">Nome</label>
 					<form:hidden path="codigo" value="${usuario.codigo}"/>
-					<form:input path="nome" cssClass="form-control"></form:input>	
+					<form:input path="nome" cssClass="form-control "/>	
 					<form:errors path="nome" cssClass="erro" />			
 				</div>			
 			</div>
@@ -61,9 +62,9 @@
 				<div class="col-sm-3">
 					<label for="setor" class="control-label">Setor</label>
 					<form:select path="setor" cssClass="form-control">
-						<option value="">Selecione o setor...</option>
+						<option value="${fn:toUpperCase(usuario.setor)}">${usuario.setor}</option>
 						<c:forEach items="${setores}" var="setor" >
-							<form:option value="${setor}" >${setor.descricao}</form:option>
+							<form:option value="${setor}">${setor.descricao}</form:option>
 						</c:forEach>	
 					</form:select>
 					<form:errors path="setor" cssClass="erro" />
@@ -72,8 +73,8 @@
 			
 			<div class="row  form-group">
 				<div class="radio  col-sm-2">
-					<label><form:radiobutton path="ativo" name="ativo" id="ativo" value="true" checked="checked" />Ativo</label>	
-					<label><form:radiobutton path="ativo" name="ativo" id="inativo" value="false" />Inativo</label>
+					<label><input type="radio" name="ativo" id="ativo" value="true" <c:if test="${usuario.ativo == true}">checked="checked"</c:if>>Ativo</label>	
+					<label><input type="radio" name="ativo" id="inativo" value="false" <c:if test="${usuario.ativo == false}">checked="checked"</c:if>>Inativo</label>
 				</div>
 			</div>	
 			

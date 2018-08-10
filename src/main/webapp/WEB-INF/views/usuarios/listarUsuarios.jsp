@@ -37,9 +37,9 @@
 				<h1>Lista de usuários</h1>
 			</div>
 			<div class="col-xs-12 col-md-4 col-md-offset-2 busca">
-				<form:form action="${s:mvcUrl('MC#buscaPorNome').build()}" method="POST" commandName="municipio">
+				<form:form action="${s:mvcUrl('UC#buscarPorNome').build()}" method="POST" commandName="usuario">
 					<div class="input-group">
-						<form:input path="nome" cssClass="form-control" placeholder="Pesquisar por nome do município" />
+						<form:input path="nome" cssClass="form-control" placeholder="Pesquisar por nome do usuário" />
 						<span class="input-group-btn">
 							<button type="submit" class="btn btn-default">
 								<span class="glyphicon glyphicon-search"></span>
@@ -54,18 +54,18 @@
 	<div class="container">
 		<!-- Opcao com colapse -->
 		<div class="panel-group">
-			<c:forEach items="${municipios}" var="municipio" varStatus="status">
-				<div <c:if test="${municipio.ativo == false}">class="panel panel-danger"</c:if>
-					 <c:if test="${municipio.ativo == true}">class="panel panel-default"</c:if>>
+			<c:forEach items="${todosUsuarios}" var="usuario" varStatus="status">
+				<div <c:if test="${usuario.ativo == false}">class="panel panel-danger"</c:if>
+					 <c:if test="${usuario.ativo == true}">class="panel panel-default"</c:if>>
 					<div class="panel-heading">
 						<div class="panel-title">
 							<table>
 							   <tr>
-								   <td class="tituloMuni">${municipio.nome}</td>
+								   <td class="tituloMuni">${usuario.nome}      |      ${usuario.email}      |      ${usuario.setor}        </td>
 								   <security:authorize access="hasRole('ROLE_ADMINISTRADOR')"> <!-- isAuthenticated() -->
 										<td>
 											<div class="text-right">
-												<form:form action="${s:mvcUrl('MC#formEditar').arg(0,municipio.id).build()}" method="POST">
+												<form:form action="${s:mvcUrl('UC#formEditar').arg(0,usuario.codigo).build()}" method="POST">
 													<button type="submit" class="btn btn-default  btn-xs">
 														<span class="glyphicon glyphicon-pencil"></span>
 													</button>
@@ -74,7 +74,7 @@
 										</td>		
 										<td>
 											<div class="text-left">
-												<form:form action="${s:mvcUrl('MC#exclusao').arg(0,municipio.id).build()}" method="POST">
+												<form:form action="${s:mvcUrl('UC#exclusao').arg(0,usuario.codigo).build()}" method="POST">
 													<button type="submit" class="btn btn-default  btn-xs">
 														<span class="glyphicon glyphicon-trash"></span>
 													</button>
@@ -82,7 +82,6 @@
 											</div>
 										</td>
 									</security:authorize>
-								   <td class="tituloMuni  text-right">0/${municipio.conexoes.size()}</td>
 							   </tr>
 							</table>
 						</div>

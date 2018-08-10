@@ -1,5 +1,7 @@
 package br.com.aspconexoes.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -52,21 +55,48 @@ public class UsuarioController {
 		
 		usuarioDAO.salvar(usuario);			
 		
-		return new ModelAndView("redirect:/usuarios/cadastro");
+		return new ModelAndView("redirect:/usuarios/listar");
 	}
 	
 	@RequestMapping(value="/listar")
 	public ModelAndView listarTodosUsuarios(Usuario usuario) {
 		ModelAndView modelAndView = new ModelAndView("usuarios/listarUsuarios");
 		
+		List<Usuario> todosUsuarios = usuarioDAO.buscarTodos();
+		modelAndView.addObject("todosUsuarios", todosUsuarios);		
+		
 		return modelAndView;
 	}
 	
-	@RequestMapping("buscarPorNome")
+	@RequestMapping(value="/buscarPorNome", method=RequestMethod.POST)
 	public ModelAndView buscarPorNome(Usuario usuario) {
-		ModelAndView modelAndView = new ModelAndView();
+		ModelAndView modelAndView = new ModelAndView("usuarios/listarUsuarios");
 		
-		usuarioDAO.buscarPorNome(usuario);
+		List<Usuario> listaUSuarios = usuarioDAO.buscarPorNome(usuario);
+		
+		modelAndView.addObject("todosUsuarios", listaUSuarios);
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/editar/{id}")
+	public ModelAndView formEditar(@PathVariable("id") Long codigo) {
+		ModelAndView modelAndView = new ModelAndView("/usuarios/editarUsuarios");
+		
+		Usuario usuario = usuarioDAO.buscaPorId(codigo);
+		modelAndView.addObject("usuario", usuario);
+		modelAndView.addObject("setores", Setor.values());
+		modelAndView.addObject("pgrupos", grupoDao.buscarTodos());
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/excluir/{id}")
+	public ModelAndView exclusao(@PathVariable("id") Long codigo) {
+		ModelAndView modelAndView = new ModelAndView("usuarios/listarUsuarios");
+		
+		Usuario usuario = usuarioDAO.buscaPorId(codigo);
+		usuarioDAO.excluir(usuario);
 		
 		return modelAndView;
 	}

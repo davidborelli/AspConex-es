@@ -95,6 +95,12 @@ public class Usuario implements Serializable{
 	}
 
 	@Override
+	public String toString() {
+		return "Usuario [codigo=" + codigo + ", email=" + email + ", nome=" + nome + ", setor=" + setor + ", senha="
+				+ senha + ", ativo=" + ativo + ", grupo=" + grupo + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
