@@ -33,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http
 			.authorizeRequests()
 				.antMatchers("/municipios/buscaPorNome").authenticated()
+				.antMatchers("/municipios/hbuscaPorNome").authenticated()
 				.antMatchers("/municipios/").authenticated()
 				.antMatchers("/conexoes/**").hasRole("ADMINISTRADOR")
 				.antMatchers("/municipios/**").hasRole("ADMINISTRADOR")

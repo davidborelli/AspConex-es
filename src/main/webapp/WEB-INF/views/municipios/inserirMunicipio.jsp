@@ -33,6 +33,15 @@
 				<h1>Cadastrar município</h1>
 			</div>
 			
+			<c:forEach items="${mensagem}" var="msg">
+				<div class="alert alert-success"> <!--succes | warning | info-->
+					<button type="button" class="close" data-dismiss="alert">
+						<span>&times;</span>
+					</button>
+					<b>${msg}</b>
+				</div>
+			</c:forEach>
+			
 			<form:form action="${s:mvcUrl('MC#gravar').build()}" method="post" commandName="municipio">
 			
 				<div class="row form-group">
@@ -43,8 +52,8 @@
 						<form:errors path="nome" cssClass="erro"  />
 					</div>	
 					<div class="radio col-sm-5">
-						<label><input type="radio" name="ativo" id="ativo" value="true" <c:if test="${municipio.ativo == true}">checked="checked"</c:if>>Ativo</label>	
 						<label><input type="radio" name="ativo" id="inativo" value="false" <c:if test="${municipio.ativo == false}">checked="checked"</c:if>>Inativo</label>
+						<label><input type="radio" name="ativo" id="ativo" value="true" <c:if test="${municipio.ativo == true}">checked="checked"</c:if>>Ativo</label>	
 					</div>	
 				</div>
 				

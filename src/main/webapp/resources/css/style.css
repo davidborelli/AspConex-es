@@ -13,6 +13,7 @@ body {
 	padding: 20px 30px;
 	background-color: rgba(0, 0, 0, .9);
 	color: #FFF;
+	border-radius: 20px;
 
 	transform: translateY(-50%, length);
 }
@@ -22,6 +23,14 @@ body {
 }
 
 .formulario-login h2 {
-	margin: 0 0 30px;
+	margin: 30px;
 	font-size: 1em; /*1em = Pega tamanho fonte do pai*/
+}
+
+span.none{
+	list-style-type: none;
+}
+
+div.mensagem {
+	margin-bottom: 10px;
 }

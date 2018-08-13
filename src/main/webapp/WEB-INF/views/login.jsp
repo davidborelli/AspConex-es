@@ -16,8 +16,8 @@
 
 	<title>Login | AspConexões</title>
 
-	<link rel="stylesheet" href="${cssPath}/bootstrap.min.css">
-	<link rel="stylesheet" href="${cssPath}/style.css">
+	<link rel="stylesheet" href="${cssPath}/bootstrap.min.css" />
+	<link rel="stylesheet" href="${cssPath}/style.css" />
 </head>
 <body>
 
@@ -29,14 +29,11 @@
 	
 		<form:form servletRelativeAction="/login" method="post">
 		
-		<div class="form-group">
-				<div class="col-sm-offset-2  com-sm-10">
-					<ul>
-						<c:forEach items="${erros}" var="msg">
-							<li class="erro">${msg}</li>
-						</c:forEach>
-					</ul>
-				</div>
+			<div class="alert alert-danger  text-center"> <!--succes | warning | info-->
+				<button type="button" class="close" data-dismiss="alert">
+					<span>&times;</span>
+				</button>
+				<b>Usuário e/ou senha inválido!</b>
 			</div>
 		
 			<div class="form-group">
@@ -44,7 +41,7 @@
 					<div class="input-group-addon">
 						<span class="glyphicon glyphicon-user"></span>
 					</div>
-					<input type="text" name="username" class="form-control" placeholder="Usuário">
+					<input type="email" name="username" class="form-control" placeholder="Usuário">
 				</div>
 			</div>
 

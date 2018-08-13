@@ -92,15 +92,23 @@
 		</div>			
 			
 		<div class="row">
-			<div class="col-sm-6 paginacao text-right">
+			<div class="col-sm-12 paginacao text-right">
 				<ul class="pagination">
-					<li class="disabled"><a href=""><span> << </span></a></li>
-					<li class="active"><a href=""><span>1</span></a></li>
+					<li>
+				    	<a href="#" aria-label="Previous">
+				      		<span aria-hidden="true">&laquo;</span>
+				      	</a>
+				    </li>
+					<li><a href=""><span>1</span></a></li>
 					<li><a href=""><span>2</span></a></li>
 					<li><a href=""><span>3</span></a></li>
 					<li><a href=""><span>4</span></a></li>
 					<li><a href=""><span>5</span></a></li>
-					<li><a href=""><span>>></span></a></li>
+					<li>
+				    	<a href="#" aria-label="Next">
+				      		<span aria-hidden="true">&raquo;</span>
+				     	</a>
+				    </li>
 				</ul>
 			</div>
 		</div>

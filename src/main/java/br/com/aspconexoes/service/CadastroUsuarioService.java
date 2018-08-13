@@ -14,8 +14,7 @@ public class CadastroUsuarioService {
 	private Usuarios usuarios;
 	
 	@Transactional
-	public void salvar(Usuario usuario) {
-		
+	public void salvar(Usuario usuario) {		
 		usuarios.save(usuario);
 	}
 	

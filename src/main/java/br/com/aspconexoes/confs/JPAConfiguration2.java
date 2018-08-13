@@ -16,16 +16,16 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import br.com.aspconexoes.repository.Municipios;
 import br.com.aspconexoes.repository.Usuarios;
 
 /* Habilitando para o Spring tomar conta das transações */
 @Configuration
-@ComponentScan(basePackageClasses = {Usuarios.class, Municipios.class})
+@ComponentScan(basePackageClasses = Usuarios.class)
 @EnableJpaRepositories(basePackageClasses = Usuarios.class, enableDefaultTransactions = false)
 @EnableTransactionManagement
-public class JPAConfiguration {
+public class JPAConfiguration2 {
 
+	
 	@Bean
 	/* Criando a Fabrica de Conexões para utilizar o Gerenciador de Entidades */
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, Properties additionalProperties) {
@@ -77,7 +77,6 @@ public class JPAConfiguration {
 		JpaTransactionManager transactionManager = new JpaTransactionManager(emf);
 		return transactionManager;
 	}
-	
 }
 
 

@@ -9,6 +9,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -25,6 +26,7 @@ import br.com.aspconexoes.models.Conexao;
 @EnableWebMvc //Habilita uso do Spring WebMVC
 @ComponentScan(basePackageClasses= {HomeController.class, Conexao.class, ConexaoDAO.class}) //Falando onde vai estar os controllers
 @EnableCaching
+@EnableSpringDataWebSupport //Adiciona suporte para algumas coisas do SpringData, como paginação, Pageable
 public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 
 	@Bean

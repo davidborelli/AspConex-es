@@ -6,10 +6,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +19,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.aspconexoes.daos.MunicipioDAO;
 import br.com.aspconexoes.models.Municipio;
-import br.com.aspconexoes.validation.MunicipioValidator;
+import br.com.aspconexoes.repository.Municipios;
+import br.com.aspconexoes.service.CadastroMunicipioService;
+import br.com.aspconexoes.service.exception.NomeMunicipioCadastradoException;
 
 @Controller
 @RequestMapping("/municipios")
@@ -26,11 +29,17 @@ public class MunicipiosController {
 	
 	@Autowired
 	private MunicipioDAO municipioDao;
+	
+	@Autowired
+	private CadastroMunicipioService cadastroMunicipioService;
+	
+	@Autowired
+	private Municipios municipios;
 
-	@InitBinder
+	/*@InitBinder
 	public void InitBinder(WebDataBinder binder) {
 		binder.addValidators(new MunicipioValidator());
-	}
+	}*/
 	
 	@RequestMapping("/")
 	public ModelAndView listarTodosMunicipios(Municipio municipio) {
@@ -46,7 +55,7 @@ public class MunicipiosController {
 	@RequestMapping("/cadastro")
 	public ModelAndView form(Municipio municipio) {
 		ModelAndView modelAndView = new ModelAndView("municipios/inserirMunicipio");
-		//modelAndView.addObject("tipos", TipoConexao.values());
+		
 		return modelAndView;
 	}
 	
@@ -58,13 +67,20 @@ public class MunicipiosController {
 			return form(municipio);
 		}
 		
-		municipioDao.salvar(municipio);
+		try {
+			cadastroMunicipioService.salvar(municipio);
+		} catch (NomeMunicipioCadastradoException e) {
+			result.rejectValue("nome", e.getMessage(), e.getMessage());
+			return form(municipio);
+		}	
 		
-		return new ModelAndView("redirect:/municipios/");
+		attributes.addFlashAttribute("mensagem", "Município cadastrado com sucesso");
+		
+		return new ModelAndView("redirect:/municipios/cadastro");
 	}	
 	
 	@RequestMapping(value="/buscaPorNome" ,method=RequestMethod.POST)
-	public ModelAndView buscaPorNome(Municipio municipio) {
+	public ModelAndView buscaPorNome(Municipio municipio, @PageableDefault(size=5) Pageable pageable) {
 		ModelAndView modelAndView = new ModelAndView("municipios/listarMunicipio");
 		
 		List<Municipio> municipiosPorNome =  municipioDao.buscaPorNome(municipio);
@@ -74,12 +90,12 @@ public class MunicipiosController {
 	}
 	
 	@RequestMapping(value="/hbuscaPorNome" ,method=RequestMethod.POST)
-	public ModelAndView hbuscaPorNome(Municipio municipio) {
-		ModelAndView modelAndView = new ModelAndView("home");
+	public ModelAndView hbuscaPorNome(Municipio municipio, @PageableDefault(size=5) Pageable pageable) {
+		ModelAndView modelAndView = new ModelAndView("/home");
 		
-		List<Municipio> municipiosPorNome =  municipioDao.buscaPorNome(municipio);
-		modelAndView.addObject("municipios", municipiosPorNome);
+		Page<Municipio> pagina = municipios.filtrarPorNomeOrdenado(municipio, pageable);
 		
+		modelAndView.addObject("pagina", pagina);
 		return modelAndView;
 	}
 	

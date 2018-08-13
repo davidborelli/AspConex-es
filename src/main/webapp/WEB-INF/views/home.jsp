@@ -17,9 +17,9 @@
 	<c:url value="/resources/css" var="cssPath" />
 	<c:url value="/municipios/buscaPorNome" var="buscaPorNome" />
 	
-	<link rel="stylesheet" href="${cssPath}/bootstrap.min.css">
-	<link rel="stylesheet" href="${cssPath}/index.css">
-	<link rel="stylesheet" href="${cssPath}/aspconexoes.css">
+	<link rel="stylesheet" href="${cssPath}/bootstrap.min.css" />
+	<link rel="stylesheet" href="${cssPath}/index.css" />
+	<link rel="stylesheet" href="${cssPath}/aspconexoes.css" />
 	
 </head>
 <body>
@@ -29,7 +29,6 @@
 		<ol class="breadcrumb">
 			<li><a href="">Início</a></li>
 			<li class="active">Conexões</li>
-			<!-- <li class="active">Pesquisa</li> -->
 		</ol>
 
 		<div class="row cabecalho">
@@ -51,10 +50,13 @@
 		</div>
 	</div>
 		
+	<div class="col-sm-12  text-center" <c:if test="${pagina.getSize() == 0}">Nenhum municipío encontrado</c:if>></div>
+		
 	<div class="container">
 		<!-- Opcao com colapse -->
 		<div class="panel-group">
-			<c:forEach items="${municipios}" var="municipio" varStatus="status">
+			<c:out value="${pagina}"></c:out>
+			<c:forEach items="${pagina.content}" var="municipio" varStatus="status">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<a class="lblTitleNomeMuni" data-toggle="collapse" href="#collapse${status.index}">	
@@ -123,20 +125,29 @@
   				</div>
 			</c:forEach>
 		</div>			
-			
+		
 		<div class="row">
 			<div class="col-sm-6">
 				<button class="btn btn-primary" data-toggle="modal" data-target="#novaOS">Nova Ordem de Serviço</button>
 			</div>
 			<div class="col-sm-6 paginacao text-right">
 				<ul class="pagination">
-					<li class="disabled"><a href=""><span> << </span></a></li>
-					<li class="active"><a href=""><span>1</span></a></li>
-					<li><a href=""><span>2</span></a></li>
-					<li><a href=""><span>3</span></a></li>
-					<li><a href=""><span>4</span></a></li>
-					<li><a href=""><span>5</span></a></li>
-					<li><a href=""><span>>></span></a></li>
+					<li>
+						<a href="#" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					<c:forEach var="i" begin="1" end="${pagina.getTotalPages()}">
+						<li 
+							<c:if test="${i-1 == pagina.getNumber()}">class="active"</c:if>>
+								<a href="?page=${i-1}">${i}</a>
+						</li>	
+					</c:forEach>
+					<li>
+						<a href="#" aria-label="Next">
+	        				<span aria-hidden="true">&raquo;</span>
+	      				</a>
+					</li>
 				</ul>
 			</div>
 		</div>

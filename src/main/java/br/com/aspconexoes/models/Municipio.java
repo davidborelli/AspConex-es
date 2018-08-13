@@ -25,7 +25,7 @@ public class Municipio implements Serializable {
 	@OneToMany(mappedBy="municipio", cascade=CascadeType.ALL)
 	private List<Conexao> conexoes = new ArrayList<>();
 	
-	private boolean ativo;	
+	private boolean ativo = true;	
 	
 	public Municipio() {
 		

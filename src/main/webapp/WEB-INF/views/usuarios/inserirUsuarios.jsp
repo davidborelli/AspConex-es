@@ -46,7 +46,7 @@
 			<div class="row  form-group">
 				<div class="col-sm-5">
 					<label for="email" class="control-label">E-mail</label>
-					<form:input path="email" cssClass="form-control" autocomplete="off"/>
+					<form:input type="email" path="email" cssClass="form-control" autocomplete="off"/>
 					<form:errors path="email" cssClass="erro" />
 				</div>				
 					
