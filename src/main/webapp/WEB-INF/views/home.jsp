@@ -36,7 +36,7 @@
 				<h1>Conexões</h1>
 			</div>
 			<div class="col-xs-12 col-md-4 col-md-offset-2 busca">
-				<form:form action="${s:mvcUrl('MC#hbuscaPorNome').build()}" method="POST" commandName="municipio">
+				<form:form action="${s:mvcUrl('MC#hbuscaPorNome').build()}" method="GET" commandName="municipio">
 					<div class="input-group">
 						<form:input path="nome" cssClass="form-control" placeholder="Pesquisar por nome do município" />
 						<span class="input-group-btn">
@@ -50,13 +50,12 @@
 		</div>
 	</div>
 		
-	<div class="col-sm-12  text-center" <c:if test="${pagina.getSize() == 0}">Nenhum municipío encontrado</c:if>></div>
+	<div class="col-sm-12  text-center" <c:if test="${pagina.tamanho == 0}">Nenhum municipío encontrado</c:if>></div>
 		
 	<div class="container">
 		<!-- Opcao com colapse -->
 		<div class="panel-group">
-			<c:out value="${pagina}"></c:out>
-			<c:forEach items="${pagina.content}" var="municipio" varStatus="status">
+			<c:forEach items="${pagina.getConteudo()}" var="municipio" varStatus="status">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<a class="lblTitleNomeMuni" data-toggle="collapse" href="#collapse${status.index}">	
@@ -132,19 +131,19 @@
 			</div>
 			<div class="col-sm-6 paginacao text-right">
 				<ul class="pagination">
-					<li>
-						<a href="#" aria-label="Previous">
+					<li <c:if test="${pagina.isPrimeira()}"> class="disabled"</c:if>>
+						<a <c:if test="${pagina.getAtual() != 0}">href="${pagina.urlParaPagina(pagina.getAtual() - 1)}" aria-label="Previous"</c:if>>
 							<span aria-hidden="true">&laquo;</span>
 						</a>
 					</li>
-					<c:forEach var="i" begin="1" end="${pagina.getTotalPages()}">
+					<c:forEach var="i" begin="1" end="${pagina.getTotalPaginas()}">
 						<li 
-							<c:if test="${i-1 == pagina.getNumber()}">class="active"</c:if>>
-								<a href="?page=${i-1}">${i}</a>
+							<c:if test="${i-1 == pagina.getAtual()}">class="active"</c:if>>
+								<a href="${pagina.urlParaPagina(i-1)}">${i}</a>
 						</li>	
 					</c:forEach>
-					<li>
-						<a href="#" aria-label="Next">
+					<li <c:if test="${pagina.isUltima()}">class="disabled"</c:if>>
+						<a <c:if test="${!pagina.isUltima()}">href="${pagina.urlParaPagina(pagina.getAtual() + 1)}" aria-label="Next"</c:if>>
 	        				<span aria-hidden="true">&raquo;</span>
 	      				</a>
 					</li>

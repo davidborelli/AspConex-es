@@ -25,7 +25,7 @@ public class MunicipiosImpl implements MunicipiosQueries {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Page<Municipio> filtrarPorNomeOrdenado(Municipio municipio, Pageable pageable) {
-		Query query = manager.createQuery("select m from Municipio m where m.nome like :pNome order by nome", Municipio.class);
+		Query query = manager.createQuery("select m from Municipio m where m.nome like :pNome order by m.nome", Municipio.class);
 		query.setParameter("pNome", "%"+municipio.getNome()+"%");
 		int qtdTotalDeItens = query.getResultList().size();
 		
@@ -37,15 +37,19 @@ public class MunicipiosImpl implements MunicipiosQueries {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Page<Municipio> listaTodosOrdenadoPorNome(Pageable pageable) {		
+	public Page<Municipio> listaTodosOrdenadoPorNome(Pageable pageable) {
+		//Query que sera executada para buscar os registros
 		Query query = manager.createQuery("select m from Municipio m order by m.nome", Municipio.class);
+		
+		//Conta quantos registros retornou na pesquisa
 		int qtdTotalDeItens = query.getResultList().size();
 		
-		paginacao.preparar(query, pageable);		
+		//Insere os parametros de limit
+		paginacao.preparar(query, pageable);
+		
+		//Retorna a lista da página que quero ver
 		List<Municipio> listaMunicipios = query.getResultList();	
 	
 		return new PageImpl<Municipio>(listaMunicipios, pageable, qtdTotalDeItens);
-		
 	}
-
 }
