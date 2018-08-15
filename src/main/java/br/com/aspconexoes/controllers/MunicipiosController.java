@@ -11,7 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +26,7 @@ import br.com.aspconexoes.models.Municipio;
 import br.com.aspconexoes.repository.Municipios;
 import br.com.aspconexoes.service.CadastroMunicipioService;
 import br.com.aspconexoes.service.exception.NomeMunicipioCadastradoException;
+import br.com.aspconexoes.validation.MunicipioValidator;
 
 @Controller
 @RequestMapping("/municipios")
@@ -38,10 +41,10 @@ public class MunicipiosController {
 	@Autowired
 	private Municipios municipios;
 
-	/*@InitBinder
+	@InitBinder("municipio")
 	public void InitBinder(WebDataBinder binder) {
 		binder.addValidators(new MunicipioValidator());
-	}*/
+	}
 	
 	@RequestMapping("/")
 	public ModelAndView listarTodosMunicipios(Municipio municipio) {

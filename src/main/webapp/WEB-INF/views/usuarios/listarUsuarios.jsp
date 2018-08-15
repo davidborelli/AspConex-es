@@ -37,7 +37,7 @@
 				<h1>Lista de usuários</h1>
 			</div>
 			<div class="col-xs-12 col-md-4 col-md-offset-2 busca">
-				<form:form action="${s:mvcUrl('UC#buscarPorNome').build()}" method="POST" commandName="usuario">
+				<form:form action="${s:mvcUrl('UC#buscarPorNome').build()}" method="GET" commandName="usuario">
 					<div class="input-group">
 						<form:input path="nome" cssClass="form-control" placeholder="Pesquisar por nome do usuário" />
 						<span class="input-group-btn">

@@ -31,7 +31,7 @@ public class UsuarioController {
 	@Autowired
 	private GrupoDAO grupoDao;
 	
-	@InitBinder
+	@InitBinder("usuario")
 	public void InitBinder(WebDataBinder binder) {
 		binder.addValidators(new UsuarioValidator());
 	}
@@ -93,7 +93,7 @@ public class UsuarioController {
 	
 	@RequestMapping(value="/excluir/{id}")
 	public ModelAndView exclusao(@PathVariable("id") Long codigo) {
-		ModelAndView modelAndView = new ModelAndView("usuarios/listarUsuarios");
+		ModelAndView modelAndView = new ModelAndView("redirect:/usuarios/listar");
 		
 		Usuario usuario = usuarioDAO.buscaPorId(codigo);
 		usuarioDAO.excluir(usuario);
