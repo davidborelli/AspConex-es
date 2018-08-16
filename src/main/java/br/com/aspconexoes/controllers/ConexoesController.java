@@ -53,14 +53,17 @@ public class ConexoesController {
 	@RequestMapping(method=RequestMethod.POST)
 	@CacheEvict(value = "conexoesHome", allEntries = true)
 	public ModelAndView gravar(@Valid Conexao conexao, BindingResult result, RedirectAttributes attributes) {
+		ModelAndView modelAndView = new ModelAndView("redirect:/conexoes/cadastro");
+		
 		
 		if(result.hasErrors()) {
 			return form(conexao);
 		}
 		
 		conexaoDao.salvar(conexao);
+		attributes.addFlashAttribute("mensagem", "Conexão cadastrada com sucesso");
 		
-		return new ModelAndView("redirect:/conexoes/cadastro");
+		return modelAndView;
 	}
 	
 	@RequestMapping("/listar")

@@ -15,11 +15,14 @@
 	
 	<!-- Criando uma variável -->
 	<c:url value="/resources/css" var="cssPath" />
+	<c:url value="/resources/img" var="imgPath" />
 	<c:url value="/municipios/buscaPorNome" var="buscaPorNome" />
 	
 	<link rel="stylesheet" href="${cssPath}/bootstrap.min.css" />
 	<link rel="stylesheet" href="${cssPath}/index.css" />
 	<link rel="stylesheet" href="${cssPath}/aspconexoes.css" />
+	
+	<link rel="shortcut icon" href="${imgPath}/favicon.png" />
 	
 </head>
 <body>
@@ -50,9 +53,9 @@
 		</div>
 	</div>
 		
-	<div class="col-sm-12  text-center" <c:if test="${pagina.tamanho == 0}">Nenhum municipío encontrado</c:if>></div>
 		
 	<div class="container">
+		<c:if test="${pagina.isVazia()}"><div class="alert alert-warning  text-center" role="alert"><b>Nenhum município encontrado...</b></div></c:if>
 		<!-- Opcao com colapse -->
 		<div class="panel-group">
 			<c:forEach items="${pagina.getConteudo()}" var="municipio" varStatus="status">
@@ -125,121 +128,30 @@
 			</c:forEach>
 		</div>			
 		
-		<div class="row">
-			<div class="col-sm-6">
-				<button class="btn btn-primary" data-toggle="modal" data-target="#novaOS">Nova Ordem de Serviço</button>
-			</div>
-			<div class="col-sm-6 paginacao text-right">
-				<ul class="pagination">
-					<li <c:if test="${pagina.isPrimeira()}"> class="disabled"</c:if>>
-						<a <c:if test="${pagina.getAtual() != 0}">href="${pagina.urlParaPagina(pagina.getAtual() - 1)}" aria-label="Previous"</c:if>>
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-					<c:forEach var="i" begin="1" end="${pagina.getTotalPaginas()}">
-						<li 
-							<c:if test="${i-1 == pagina.getAtual()}">class="active"</c:if>>
-								<a href="${pagina.urlParaPagina(i-1)}">${i}</a>
-						</li>	
-					</c:forEach>
-					<li <c:if test="${pagina.isUltima()}">class="disabled"</c:if>>
-						<a <c:if test="${!pagina.isUltima()}">href="${pagina.urlParaPagina(pagina.getAtual() + 1)}" aria-label="Next"</c:if>>
-	        				<span aria-hidden="true">&raquo;</span>
-	      				</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	
-	<div class="modal fade" id="confirm" role="dialog">
-		<div class="modal-dialog modal-md">
-		
-			<div class="modal-content">
-				<div class="modal-body">
-					<p class="text-center"> Confirma a exclusão da conexão?</p>
-				</div>
-				<div class="modal-footer">
-					<a href="wfefwe" type="button" class="btn btn-danger" id="delete">Apagar Registo</a>
-					<button type="button" data-dismiss="modal" class="btn btn-default">Cancelar</button>
+		<c:if test="${!pagina.isVazia()}">
+			<div class="row">
+				<div class="col-sm-12 paginacao text-right">
+					<ul class="pagination">
+						<li <c:if test="${pagina.isPrimeira()}"> class="disabled"</c:if>>
+							<a <c:if test="${pagina.getAtual() != 0}">href="${pagina.urlParaPagina(pagina.getAtual() - 1)}" aria-label="Previous"</c:if>>
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						<c:forEach var="i" begin="1" end="${pagina.getTotalPaginas()}">
+							<li 
+								<c:if test="${i-1 == pagina.getAtual()}">class="active"</c:if>>
+									<a href="${pagina.urlParaPagina(i-1)}">${i}</a>
+							</li>	
+						</c:forEach>
+						<li <c:if test="${pagina.isUltima()}">class="disabled"</c:if>>
+							<a <c:if test="${!pagina.isUltima()}">href="${pagina.urlParaPagina(pagina.getAtual() + 1)}" aria-label="Next"</c:if>>
+		        				<span aria-hidden="true">&raquo;</span>
+		      				</a>
+						</li>
+					</ul>
 				</div>
 			</div>
-		
-		</div>
-	</div>
-	
-
-	<div class="modal fade" id="novaOS">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" data-dismiss="modal" class="close">
-						<span>&times;</span>
-					</button>
-					<h4 class="modal-title">Nova Ordem de Serviço</h4>
-				</div>
-				<form>
-					<div class="modal-body">
-						
-						<!-- Alert que pode ser fechado -->
-						<div class="alert alert-warning"> <!--succes | warning | info-->
-						<button type="button" class="close" data-dismiss="alert">
-							<span>&times;</span>
-						</button>
-							<b>Ocorreu um erro!</b> Verifique se preencheu todos os campos.
-						</div>
-
-						<div class="row">
-							<div class="form-group col-xs-12">
-								<label>Código da OS</label>
-								<p class="form-control-static">6564</p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="form-group has-error col-sm-5">
-								<label class="control-label" for="Cliente">Cliente</label>
-								<select id="Cliente" class="form-control"> <!-- form-control = fala para bootstrap que Ã© dele -->
-									<option value="">Selecione...</option>
-									<option value="1">Frodo Bolseiro</option>
-									<option value="2">Gandalf Cinzento</option>
-									<option value="3">Sauron de Mordor</option>
-								</select>
-							</div>
-							<div class="form-group has-error col-sm-7">
-								<label class="control-label" for="Servicos">Serviços</label>
-								<select id="Servicos" class="form-control"> <!-- form-control = fala para bootstrap que Ã© dele -->
-									<option value="">Selecione...</option>
-									<option value="1">Ajuste Data/Hora</option>
-									<option value="2">Conserto de Engrenagens</option>
-									<option value="3">Troca de Bateria</option>
-								</select>
-							</div>
-						</div>
-						<div class="row">
-							<div class="form-group has-error col-xs-12">
-								<label class="control-label" for="Observacao">Observação</label>
-								<textarea id="Observacao" class="form-control" rows="3">
-									
-								</textarea>
-							</div>
-						</div>
-						<div class="row">
-							<div class="form-group has-error col-sm-4">
-								<label class="control-label" for="Valor">Valor</label>
-								<div class="input-group">
-									<div class="input-group-addon">R$</div>
-									<input type="text" name="valor" id="Valor" class="form-control">
-								</div>
-							</div>						
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="reset" class="btn btn-danger">Limpar</button>
-						<button type="submit" class="btn btn-primary">Salvar</button>
-					</div>
-				</form>
-			</div>
-		</div>
+		</c:if>
 	</div>
   	
 	<footer class="page-footer">	

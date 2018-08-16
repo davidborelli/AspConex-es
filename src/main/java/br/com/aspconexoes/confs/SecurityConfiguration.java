@@ -32,8 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/municipios/buscaPorNome").authenticated()
-				.antMatchers("/municipios/hbuscaPorNome").authenticated()
+				.antMatchers("/municipios/hbuscarMunicipio/**").authenticated()
+				.antMatchers("/municipios/buscarMunicipio/**").authenticated()
 				.antMatchers("/municipios/").authenticated()
 				.antMatchers("/conexoes/**").hasRole("ADMINISTRADOR")
 				.antMatchers("/municipios/**").hasRole("ADMINISTRADOR")
@@ -43,6 +43,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.formLogin()
 				.loginPage("/login")
 				.permitAll()
+				.and()
+				.rememberMe()
 				.and()
 			.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

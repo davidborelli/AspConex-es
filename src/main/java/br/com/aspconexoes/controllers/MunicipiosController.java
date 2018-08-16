@@ -1,12 +1,11 @@
 package br.com.aspconexoes.controllers;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -47,12 +46,13 @@ public class MunicipiosController {
 	}
 	
 	@RequestMapping("/")
-	public ModelAndView listarTodosMunicipios(Municipio municipio) {
+	@Cacheable(value = "conexoesHome")
+	public ModelAndView listarTodosMunicipios(Municipio municipio, BindingResult result
+			, @PageableDefault(size=10) Pageable pageable, HttpServletRequest httpServletRequest) {
 		ModelAndView modelAndView = new ModelAndView("municipios/listarMunicipio");
 		
-		List<Municipio> listMunicipios = municipioDao.listarTodos();
-		
-		modelAndView.addObject("municipios", listMunicipios);
+		PageWrapper<Municipio> paginaWrapper = new PageWrapper<>(municipios.listaTodosOrdenadoPorNome(pageable), httpServletRequest);
+		modelAndView.addObject("pagina", paginaWrapper);
 		
 		return modelAndView;
 	}
@@ -61,43 +61,42 @@ public class MunicipiosController {
 	public ModelAndView form(Municipio municipio) {
 		ModelAndView modelAndView = new ModelAndView("municipios/inserirMunicipio");
 		
+		modelAndView.addObject(municipio);
+		
 		return modelAndView;
 	}
 	
 	@RequestMapping(value="/", method=RequestMethod.POST)
 	@CacheEvict(value = "conexoesHome", allEntries = true) 
-	public ModelAndView gravar(@Valid Municipio municipio, BindingResult result, RedirectAttributes attributes) {
+	public ModelAndView gravar(@Valid Municipio municipio, BindingResult result, RedirectAttributes attributes, HttpServletRequest httpServletRequest) {
+		
+		Boolean jaCadastrado;
 		
 		if(result.hasErrors()) {
 			return form(municipio);
 		}
 		
 		try {
-			cadastroMunicipioService.salvar(municipio);
+			jaCadastrado = cadastroMunicipioService.salvar(municipio);
 		} catch (NomeMunicipioCadastradoException e) {
 			result.rejectValue("nome", e.getMessage(), e.getMessage());
 			return form(municipio);
 		}	
 		
-		attributes.addFlashAttribute("mensagem", "Município cadastrado com sucesso");
+		if(jaCadastrado == true) {
+			attributes.addFlashAttribute("mensagem", "Município alterado com sucesso");
+			return new ModelAndView("redirect:/municipios/cadastro");
+		}
 		
+		attributes.addFlashAttribute("mensagem", "Município cadastrado com sucesso");
 		return new ModelAndView("redirect:/municipios/cadastro");
+		
 	}	
 	
-	@RequestMapping(value="/buscaPorNome" ,method=RequestMethod.POST)
-	public ModelAndView buscaPorNome(Municipio municipio, @PageableDefault(size=5) Pageable pageable) {
-		ModelAndView modelAndView = new ModelAndView("municipios/listarMunicipio");
-		
-		List<Municipio> municipiosPorNome =  municipioDao.buscaPorNome(municipio);
-		modelAndView.addObject("municipios", municipiosPorNome);
-		
-		return modelAndView;
-	}
-	
 	@GetMapping(value="/buscarMunicipio")
-	public ModelAndView hbuscaPorNome(Municipio municipio, BindingResult result
-			, @PageableDefault(size=5) Pageable pageable, HttpServletRequest httpServletRequest) {
-		ModelAndView modelAndView = new ModelAndView("/home");
+	public ModelAndView buscaPorNome(Municipio municipio, BindingResult result
+			, @PageableDefault(size=10) Pageable pageable, HttpServletRequest httpServletRequest) {
+		ModelAndView modelAndView = new ModelAndView("municipios/listarMunicipio");
 		
 		PageWrapper<Municipio> paginaWrapper =  new PageWrapper<>(municipios.filtrarPorNomeOrdenado(municipio, pageable), httpServletRequest);
 		modelAndView.addObject("pagina", paginaWrapper);
@@ -105,8 +104,19 @@ public class MunicipiosController {
 		return modelAndView;
 	}
 	
+	@GetMapping(value="/hbuscarMunicipio") //h = home
+	public ModelAndView hbuscaPorNome(Municipio municipio, BindingResult result
+			, @PageableDefault(size=10) Pageable pageable, HttpServletRequest httpServletRequest) {
+		ModelAndView modelAndView = new ModelAndView("/home");
+		
+		PageWrapper<Municipio> paginaWrapper =  new PageWrapper<>(municipios.filtrarPorNomeOrdenadoEAtivo(municipio, pageable), httpServletRequest);
+		modelAndView.addObject("pagina", paginaWrapper);
+		
+		return modelAndView;
+	}
+	
 	@RequestMapping("/editar/{id}")
-	public ModelAndView formEditar(@PathVariable("id") Long id ) {
+	public ModelAndView formEditar(@PathVariable("id") Long id, HttpServletRequest httpServletRequest) {
 		ModelAndView modelAndView = new ModelAndView("municipios/inserirMunicipio");
 		
 		Municipio municipio = municipioDao.buscarPorId(id);

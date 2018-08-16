@@ -8,9 +8,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>AspConexões | Municípios</title>
+	<c:url value="/resources/img" var="imgPath" />
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/index.css">
+	
+	<link rel="shortcut icon" href="${imgPath}/favicon.png" />
 </head>
 <body>
 	<jsp:include page="/resources/templates/navbar.jsp" />

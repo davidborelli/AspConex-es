@@ -11,10 +11,15 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>AspConexões | Cadastrar município</title>
+	<c:if test="${municipio.getId() == null }"><title>AspConexões | Cadastrar município</title></c:if>
+	<c:if test="${municipio.getId() != null }"><title>AspConexões | Editar município</title></c:if>
+	
+	<c:url value="/resources/img" var="imgPath" />
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/index.css">
+	
+	<link rel="shortcut icon" href="${imgPath}/favicon.png" />
 </head>
 <body>
 	<c:url value="/" var="contextPath" />
@@ -24,13 +29,15 @@
 	<div class="container">
 		<ol class="breadcrumb">
 			<li><a href="<%=request.getContextPath()%>/">Início</a></li>
-			<li class="active">Cadastros</li>
+			<c:if test="${municipio.getId() == null}"><li class="active">Cadastros</li></c:if>
+			<c:if test="${municipio.getId() != null}"><li class="active">Editar</li></c:if>
 			<li class="active">Município</li>
 		</ol>
 		
 		<div class="container">
 			<div class="page-header">
-				<h1>Cadastrar município</h1>
+				<c:if test="${municipio.getId() == null}"><h1>Cadastrar município</h1></c:if>
+				<c:if test="${municipio.getId() != null}"><h1>Editar município</h1></c:if> 
 			</div>
 			
 			<c:forEach items="${mensagem}" var="msg">

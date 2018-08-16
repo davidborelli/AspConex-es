@@ -16,10 +16,13 @@
 	<!-- Criando uma variável -->
 	<c:url value="/resources/css" var="cssPath" />
 	<c:url value="/municipios/buscaPorNome" var="buscaPorNome" />
+	<c:url value="/resources/img" var="imgPath" />
 	
 	<link rel="stylesheet" href="${cssPath}/bootstrap.min.css">
 	<link rel="stylesheet" href="${cssPath}/index.css">
 	<link rel="stylesheet" href="${cssPath}/aspconexoes.css">
+	
+	<link rel="shortcut icon" href="${imgPath}/favicon.png" />
 	
 </head>
 <body>
@@ -37,7 +40,7 @@
 				<h1>Lista de municípios</h1>
 			</div>
 			<div class="col-xs-12 col-md-4 col-md-offset-2 busca">
-				<form:form action="${s:mvcUrl('MC#buscaPorNome').build()}" method="POST" commandName="municipio">
+				<form:form action="${s:mvcUrl('MC#buscaPorNome').build()}" method="GET" commandName="municipio">
 					<div class="input-group">
 						<form:input path="nome" cssClass="form-control" placeholder="Pesquisar por nome do município" />
 						<span class="input-group-btn">
@@ -52,9 +55,10 @@
 	</div>
 		
 	<div class="container">
+	<c:if test="${pagina.isVazia()}"><div class="alert alert-warning  text-center" role="alert"><b>Nenhum município encontrado...</b></div></c:if>
 		<!-- Opcao com colapse -->
 		<div class="panel-group">
-			<c:forEach items="${municipios}" var="municipio" varStatus="status">
+			<c:forEach items="${pagina.getConteudo()}" var="municipio" varStatus="status">
 				<div <c:if test="${municipio.ativo == false}">class="panel panel-danger"</c:if>
 					 <c:if test="${municipio.ativo == true}">class="panel panel-default"</c:if>>
 					<div class="panel-heading">
@@ -91,27 +95,30 @@
 			</c:forEach>
 		</div>			
 			
-		<div class="row">
-			<div class="col-sm-12 paginacao text-right">
-				<ul class="pagination">
-					<li>
-				    	<a href="#" aria-label="Previous">
-				      		<span aria-hidden="true">&laquo;</span>
-				      	</a>
-				    </li>
-					<li><a href=""><span>1</span></a></li>
-					<li><a href=""><span>2</span></a></li>
-					<li><a href=""><span>3</span></a></li>
-					<li><a href=""><span>4</span></a></li>
-					<li><a href=""><span>5</span></a></li>
-					<li>
-				    	<a href="#" aria-label="Next">
-				      		<span aria-hidden="true">&raquo;</span>
-				     	</a>
-				    </li>
-				</ul>
+		<c:if test="${!pagina.isVazia()}">
+			<div class="row">
+				<div class="col-sm-12 paginacao text-right">
+					<ul class="pagination">
+						<li <c:if test="${pagina.isPrimeira()}"> class="disabled"</c:if>>
+							<a <c:if test="${pagina.getAtual() != 0}">href="${pagina.urlParaPagina(pagina.getAtual() - 1)}" aria-label="Previous"</c:if>>
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						<c:forEach var="i" begin="1" end="${pagina.getTotalPaginas()}">
+							<li 
+								<c:if test="${i-1 == pagina.getAtual()}">class="active"</c:if>>
+									<a href="${pagina.urlParaPagina(i-1)}">${i}</a>
+							</li>	
+						</c:forEach>
+						<li <c:if test="${pagina.isUltima()}">class="disabled"</c:if>>
+							<a <c:if test="${!pagina.isUltima()}">href="${pagina.urlParaPagina(pagina.getAtual() + 1)}" aria-label="Next"</c:if>>
+		        				<span aria-hidden="true">&raquo;</span>
+		      				</a>
+						</li>
+					</ul>
+				</div>
 			</div>
-		</div>
+		</c:if>
 	</div>
   	
 	<footer class="page-footer">	

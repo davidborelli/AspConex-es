@@ -1,6 +1,6 @@
 package br.com.aspconexoes.service;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,14 +17,22 @@ public class CadastroMunicipioService {
 	private Municipios municipios;
 	
 	@Transactional
-	public void salvar(Municipio municipio) {
-		Optional<Municipio> municipioOptional = municipios.findByNomeIgnoreCase(municipio.getNome());
+	public Boolean salvar(Municipio municipio) {
+		List<Municipio> muni = municipios.pesquisaPorNomeEAtivo(municipio);
 		
-		if(municipioOptional.isPresent()) {
+		if(!muni.isEmpty()) {
 			throw new NomeMunicipioCadastradoException("Município já existe");
 		}
 		
+		//Se não existir id cadastra
+		if(municipio.getId() == null) {
+			municipios.save(municipio);
+			return false;
+		}
+		
+		//Se existir e estiver diferente, salva edição
 		municipios.save(municipio);
+		return true;
 	}
 	
 }

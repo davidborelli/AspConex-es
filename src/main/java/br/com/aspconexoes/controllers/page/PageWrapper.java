@@ -45,6 +45,14 @@ public class PageWrapper<T> {
 		return page.isLast();
 	}
 	
+	public Boolean isVazia() {
+		if(page.getNumberOfElements() != 0) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public String urlParaPagina(int pagina) {
 		//Se tiver o parâmetro page na URL(requisição) substitui com o número da página que será passado
 		return uriBuilder.replaceQueryParam("page", pagina).toUriString();

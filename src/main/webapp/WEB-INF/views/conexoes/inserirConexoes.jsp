@@ -11,9 +11,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>AspConexões | Cadastrar conexão</title>
+	<c:url value="/resources/img" var="imgPath" />
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/index.css">
+	
+	<link rel="shortcut icon" href="${imgPath}/favicon.png" />
 </head>
 <body>
 	<c:url value="/" var="contextPath" />
@@ -30,6 +33,15 @@
 		<div class="page-header">
 			<h1>Cadastrar Conexão</h1>
 		</div>
+		
+		<c:forEach items="${mensagem}" var="msg">
+				<div class="alert alert-success"> <!--succes | warning | info-->
+					<button type="button" class="close" data-dismiss="alert">
+						<span>&times;</span>
+					</button>
+					<b>${msg}</b>
+				</div>
+			</c:forEach>
 		
 		<form:form action="${s:mvcUrl('CC#gravar').build()}" method="post" commandName="conexao">
 		

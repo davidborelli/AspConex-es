@@ -13,12 +13,15 @@
 	  <meta name="viewport" content="width=device-width, initial-scale=1"/>
 	  
 	  <c:url value="/resources/css" var="cssPath" />
+	  <c:url value="/resources/img" var="imgPath" />
 	
 	  <title>AspConexões | 403</title>
 	  
 	  <link rel="stylesheet" type="text/css" href="${cssPath}/bootstrap.min.css">
 	  <link rel="stylesheet" type="text/css" href="${cssPath}/vendors.min.css"/>
 	  <link rel="stylesheet" type="text/css" href="${cssPath}/403.min.css"/>
+	  
+	  <link rel="shortcut icon" href="${imgPath}/favicon.png" />
 	
 	</head>
 

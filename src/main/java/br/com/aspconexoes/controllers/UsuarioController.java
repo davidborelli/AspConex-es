@@ -1,13 +1,16 @@
 package br.com.aspconexoes.controllers;
 
-import java.util.List;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.com.aspconexoes.controllers.page.PageWrapper;
 import br.com.aspconexoes.daos.GrupoDAO;
 import br.com.aspconexoes.daos.UsuarioDAO;
 import br.com.aspconexoes.models.Setor;
 import br.com.aspconexoes.models.Usuario;
+import br.com.aspconexoes.repository.Usuarios;
 import br.com.aspconexoes.validation.UsuarioValidator;
 
 @Controller
@@ -30,6 +35,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private GrupoDAO grupoDao;
+	
+	@Autowired
+	private Usuarios usuarios;
 	
 	@InitBinder("usuario")
 	public void InitBinder(WebDataBinder binder) {
@@ -48,33 +56,40 @@ public class UsuarioController {
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public ModelAndView gravar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {	
+		ModelAndView modelAndView = new ModelAndView("redirect:/usuarios/listar");
 		
 		if(result.hasErrors()) {
 			return cadastrar(usuario);
 		}
 		
-		usuarioDAO.salvar(usuario);			
-		
-		return new ModelAndView("redirect:/usuarios/listar");
-	}
-	
-	@RequestMapping(value="/listar")
-	public ModelAndView listarTodosUsuarios(Usuario usuario) {
-		ModelAndView modelAndView = new ModelAndView("usuarios/listarUsuarios");
-		
-		List<Usuario> todosUsuarios = usuarioDAO.buscarTodos();
-		modelAndView.addObject("todosUsuarios", todosUsuarios);		
+		usuarioDAO.salvar(usuario);	
+		attributes.addFlashAttribute("mensagem", "Usuário cadastrado com sucesso");
 		
 		return modelAndView;
 	}
 	
-	@RequestMapping(value="/buscarPorNome", method=RequestMethod.POST)
-	public ModelAndView buscarPorNome(Usuario usuario) {
+	@Cacheable(value = "conexoesHome")
+	@RequestMapping(value="/listar")
+	public ModelAndView listarTodosUsuarios(Usuario usuario, BindingResult result
+			, @PageableDefault(size=10) Pageable pageable, HttpServletRequest httpServletRequest) {
 		ModelAndView modelAndView = new ModelAndView("usuarios/listarUsuarios");
 		
-		List<Usuario> listaUSuarios = usuarioDAO.buscarPorNome(usuario);
+		PageWrapper<Usuario> paginaWrapper = new PageWrapper<>(usuarios.listarTodosOrdenadoPorNome(pageable) , httpServletRequest);
+				
+		modelAndView.addObject("todosUsuarios", paginaWrapper);		
 		
-		modelAndView.addObject("todosUsuarios", listaUSuarios);
+		return modelAndView;
+	}
+	
+	@Cacheable(value = "conexoesHome")
+	@GetMapping(value="/buscarPorNome")
+	public ModelAndView buscarPorNome(Usuario usuario, BindingResult result
+			, @PageableDefault(size=10) Pageable pageable, HttpServletRequest httpServletRequest) {
+		
+		ModelAndView modelAndView = new ModelAndView("usuarios/listarUsuarios");
+		
+		PageWrapper<Usuario> pageWrapper = new PageWrapper<>(usuarios.buscaPorNomeOrdenado(usuario, pageable), httpServletRequest);
+		modelAndView.addObject("todosUsuarios", pageWrapper);
 		
 		return modelAndView;
 	}

@@ -18,6 +18,8 @@
 
 	<link rel="stylesheet" href="${cssPath}/bootstrap.min.css" />
 	<link rel="stylesheet" href="${cssPath}/style.css" />
+	
+	<link rel="shortcut icon" href="${imgPath}/favicon.png" />
 </head>
 <body>
 
@@ -29,7 +31,7 @@
 	
 		<form:form servletRelativeAction="/login" method="post">
 		
-			<div class="alert alert-danger  text-center"> <!--succes | warning | info-->
+			<div class="alert alert-danger  text-center  <c:if test="${param.error == null}">hidden</c:if>"> <!--succes | warning | info-->
 				<button type="button" class="close" data-dismiss="alert">
 					<span>&times;</span>
 				</button>
@@ -56,7 +58,7 @@
 
 			<footer>
 			 	<div class="checkbox pull-left">
-					<label><input type="checkbox" name="remember-me">Lembrar de mim</label>
+					<label><input type="checkbox" id="remember-me" name="remember-me">Lembrar de mim</label>
 				</div> 
 				<button type="submit" class="btn btn-primary pull-right">Entrar</button>
 			</footer>

@@ -10,11 +10,15 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
 
 	<title>AspConexões | Editar usuário</title>
+	<c:url value="/resources/img" var="imgPath" />
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/index.css">
+	
+	<link rel="shortcut icon" href="${imgPath}/favicon.png" />
 </head>
 <body>
 	<c:url value="/" var="contextPath" />

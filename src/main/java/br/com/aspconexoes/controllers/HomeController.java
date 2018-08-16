@@ -24,10 +24,10 @@ public class HomeController {
 	@RequestMapping("/")
 	@Cacheable(value = "conexoesHome")
 	public ModelAndView index(Municipio municipio, BindingResult result
-			, @PageableDefault(size=5) Pageable pageable, HttpServletRequest httpServletRequest) {
+			, @PageableDefault(size=10) Pageable pageable, HttpServletRequest httpServletRequest) {
 		ModelAndView modelAndView = new ModelAndView("/home");
 		
-		PageWrapper<Municipio> paginaWrapper = new PageWrapper<>(municipios.listaTodosOrdenadoPorNome(pageable), httpServletRequest);
+		PageWrapper<Municipio> paginaWrapper = new PageWrapper<>(municipios.listaTodosOrdenadoPorNomeEAtivo(pageable), httpServletRequest);
 		
 		modelAndView.addObject("pagina", paginaWrapper);
 		
