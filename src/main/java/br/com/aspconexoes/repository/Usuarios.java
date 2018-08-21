@@ -9,4 +9,6 @@ import br.com.aspconexoes.repository.helper.usuario.UsuariosQueries;
 @Repository
 public interface Usuarios extends JpaRepository<Usuario, Long>, UsuariosQueries{
 
+	public Usuario findByCodigo(Long codigo);
+	
 }

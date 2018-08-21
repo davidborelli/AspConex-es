@@ -55,6 +55,14 @@
 	</div>
 		
 	<div class="container">
+	<c:forEach items="${mensagem}" var="msg">
+		<div class="alert alert-success"> <!--succes | warning | info-->
+			<button type="button" class="close" data-dismiss="alert">
+				<span>&times;</span>
+			</button>
+			<b>${msg}</b>
+		</div>
+	</c:forEach>
 	<c:if test="${pagina.isVazia()}"><div class="alert alert-warning  text-center" role="alert"><b>Nenhum município encontrado...</b></div></c:if>
 		<!-- Opcao com colapse -->
 		<div class="panel-group">

@@ -16,13 +16,12 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import br.com.aspconexoes.repository.Municipios;
-import br.com.aspconexoes.repository.Usuarios;
+import br.com.aspconexoes.repository.Conexoes;
 
 /* Habilitando para o Spring tomar conta das transações */
 @Configuration
-@ComponentScan(basePackageClasses = {Usuarios.class, Municipios.class})
-@EnableJpaRepositories(basePackageClasses = Usuarios.class, enableDefaultTransactions = false)
+@ComponentScan(basePackageClasses = {Conexoes.class}) //Mesmo mostrando onde vai estar os repositórios precisa mostrar onde estão os componentes
+@EnableJpaRepositories(basePackageClasses = Conexoes.class, enableDefaultTransactions = false)
 @EnableTransactionManagement
 public class JPAConfiguration {
 
@@ -79,17 +78,3 @@ public class JPAConfiguration {
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

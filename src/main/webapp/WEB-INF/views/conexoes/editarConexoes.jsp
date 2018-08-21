@@ -34,7 +34,7 @@
 			<h1>Editar conexão</h1>
 		</div>
 		
-		<form:form action="${s:mvcUrl('CC#editar').build()}" method="post" commandName="conexao">
+		<form:form action="${s:mvcUrl('CC#gravar').build()}" method="post" commandName="conexao">
 			
 			<div class="row  form-group">
 				<div class="col-sm-3  form-group">

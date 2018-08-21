@@ -16,22 +16,27 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import br.com.aspconexoes.daos.ConexaoDAO;
-import br.com.aspconexoes.daos.MunicipioDAO;
 import br.com.aspconexoes.models.Conexao;
 import br.com.aspconexoes.models.Municipio;
 import br.com.aspconexoes.models.TipoConexao;
+import br.com.aspconexoes.repository.Conexoes;
+import br.com.aspconexoes.repository.Municipios;
+import br.com.aspconexoes.service.ConexaoService;
+import br.com.aspconexoes.service.exception.ConexaoComMesmoIdIpCadastradoException;
 import br.com.aspconexoes.validation.ConexaoValidator;
 
 @Controller
 @RequestMapping("/conexoes")
 public class ConexoesController {
-
-	@Autowired
-	private MunicipioDAO municipioDao;
 	
 	@Autowired
-	private ConexaoDAO conexaoDao;
+	private ConexaoService conexaoService;
+	
+	@Autowired
+	private Municipios municipios;
+	
+	@Autowired
+	private Conexoes conexoes;
 	
 	@InitBinder
 	public void InitBinder(WebDataBinder binder) {
@@ -42,9 +47,10 @@ public class ConexoesController {
 	public ModelAndView form(Conexao conexao) {		
 		ModelAndView modelAndView = new ModelAndView("conexoes/inserirConexoes");
 		
-		List<Municipio> municipios = municipioDao.buscaConexoesAtivas();
+		List<Municipio> listMunicipios = municipios.listaTodosOrdenadoPorNomeEAtivo();
 		
-		modelAndView.addObject("municipios", municipios);
+		modelAndView.addObject("conexao", conexao);
+		modelAndView.addObject("municipios", listMunicipios);
 		modelAndView.addObject("tipos", TipoConexao.values());		
 		
 		return modelAndView; 
@@ -53,17 +59,27 @@ public class ConexoesController {
 	@RequestMapping(method=RequestMethod.POST)
 	@CacheEvict(value = "conexoesHome", allEntries = true)
 	public ModelAndView gravar(@Valid Conexao conexao, BindingResult result, RedirectAttributes attributes) {
-		ModelAndView modelAndView = new ModelAndView("redirect:/conexoes/cadastro");
 		
+		Boolean jaCadastrado;
 		
 		if(result.hasErrors()) {
 			return form(conexao);
 		}
 		
-		conexaoDao.salvar(conexao);
-		attributes.addFlashAttribute("mensagem", "Conexão cadastrada com sucesso");
+		try {
+			jaCadastrado = conexaoService.salvar(conexao);
+		} catch (ConexaoComMesmoIdIpCadastradoException e) {
+			result.rejectValue("id_ip", e.getMessage(), e.getMessage());
+			return form(conexao);
+		}	
 		
-		return modelAndView;
+		if(jaCadastrado == true) {
+			attributes.addFlashAttribute("mensagem", "Conexão alterada com sucesso");
+			return new ModelAndView("redirect:/conexoes/cadastro");
+		}
+		
+		attributes.addFlashAttribute("mensagem", "Conexão cadastrada com sucesso");
+		return new ModelAndView("redirect:/conexoes/cadastro");
 	}
 	
 	@RequestMapping("/listar")
@@ -73,30 +89,16 @@ public class ConexoesController {
 	
 	@RequestMapping("/editar/{id}")
 	public ModelAndView editarConexao(@PathVariable("id") Long id) {
-		ModelAndView modelAndView = new ModelAndView("/conexoes/editarConexoes");
+		//ModelAndView modelAndView = new ModelAndView("/conexoes/editarConexoes");
 		
-		Conexao conexao = conexaoDao.find(id);
-		List<Municipio> municipios = municipioDao.buscaConexoesAtivas();
+		Conexao conexao = conexoes.findById(id);
+		//List<Municipio> listMunicipios = municipios.listaTodosOrdenadoPorNomeEAtivo();
 		
-		modelAndView.addObject("conexao", conexao);
-		modelAndView.addObject("municipios", municipios);
-		modelAndView.addObject("tipos", TipoConexao.values());
+		/*modelAndView.addObject("conexao", conexao);
+		modelAndView.addObject("municipios", listMunicipios);
+		modelAndView.addObject("tipos", TipoConexao.values());*/
 		
-		return modelAndView;
-	}
-	
-	@RequestMapping(value="/editar", method=RequestMethod.POST)
-	@CacheEvict(value = "conexoesHome", allEntries = true)
-	public ModelAndView editar(@Valid Conexao conexao, BindingResult result, RedirectAttributes attributes) {
-		ModelAndView modelAndView = new ModelAndView("redirect:/");
-		
-		if(result.hasErrors()) {
-			return form(conexao);
-		}
-		
-		conexaoDao.salvar(conexao);
-		
-		return modelAndView;
+		return form(conexao);
 	}
 	
 	@RequestMapping("/excluir")
@@ -104,8 +106,8 @@ public class ConexoesController {
 	public ModelAndView exclusao(Long id) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/");
 		
-		Conexao conexao = conexaoDao.find(id);
-		conexaoDao.excluir(conexao);
+		Conexao conexao = conexoes.findById(id);
+		conexaoService.excluir(conexao);
 			
 		return modelAndView;
 	}	

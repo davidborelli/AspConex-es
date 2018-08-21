@@ -19,11 +19,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.aspconexoes.controllers.page.PageWrapper;
-import br.com.aspconexoes.daos.GrupoDAO;
-import br.com.aspconexoes.daos.UsuarioDAO;
 import br.com.aspconexoes.models.Setor;
 import br.com.aspconexoes.models.Usuario;
+import br.com.aspconexoes.repository.Grupos;
 import br.com.aspconexoes.repository.Usuarios;
+import br.com.aspconexoes.service.UsuarioService;
+import br.com.aspconexoes.service.exception.UsuarioJaCadastradoException;
 import br.com.aspconexoes.validation.UsuarioValidator;
 
 @Controller
@@ -31,13 +32,13 @@ import br.com.aspconexoes.validation.UsuarioValidator;
 public class UsuarioController {
 	
 	@Autowired
-	private UsuarioDAO usuarioDAO;
-	
-	@Autowired
-	private GrupoDAO grupoDao;
+	private Grupos grupos;
 	
 	@Autowired
 	private Usuarios usuarios;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	@InitBinder("usuario")
 	public void InitBinder(WebDataBinder binder) {
@@ -48,8 +49,9 @@ public class UsuarioController {
 	public ModelAndView cadastrar(Usuario usuario) {
 		ModelAndView modelAndView = new ModelAndView("/usuarios/inserirUsuarios");
 		
+		modelAndView.addObject("usuario", usuario);
 		modelAndView.addObject("setores", Setor.values());
-		modelAndView.addObject("pgrupos", grupoDao.buscarTodos());
+		modelAndView.addObject("pgrupos", grupos.findAll());
 		
 		return modelAndView;
 	}
@@ -57,14 +59,27 @@ public class UsuarioController {
 	@RequestMapping(method=RequestMethod.POST)
 	public ModelAndView gravar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {	
 		ModelAndView modelAndView = new ModelAndView("redirect:/usuarios/listar");
+		Boolean jaCadastrado;
+		
+		System.out.println("Usuario recebido >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + usuario);
 		
 		if(result.hasErrors()) {
 			return cadastrar(usuario);
 		}
 		
-		usuarioDAO.salvar(usuario);	
-		attributes.addFlashAttribute("mensagem", "Usuário cadastrado com sucesso");
+		try {
+			jaCadastrado = usuarioService.salvar(usuario);
+		} catch (UsuarioJaCadastradoException e) {
+			result.rejectValue("nome", e.getMessage(), e.getMessage());
+			return cadastrar(usuario);
+		}
 		
+		if(jaCadastrado == true) {
+			attributes.addFlashAttribute("mensagem", "Usuário alterado com sucesso");
+			return modelAndView;
+		}
+		
+		attributes.addFlashAttribute("mensagem", "Usuário cadastrado com sucesso");
 		return modelAndView;
 	}
 	
@@ -94,24 +109,24 @@ public class UsuarioController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value="/editar/{id}")
-	public ModelAndView formEditar(@PathVariable("id") Long codigo) {
+	@RequestMapping(value="/editar/{codigo}")
+	public ModelAndView formEditar(@PathVariable("codigo") Long codigo) {
 		ModelAndView modelAndView = new ModelAndView("/usuarios/editarUsuarios");
 		
-		Usuario usuario = usuarioDAO.buscaPorId(codigo);
+		Usuario usuario = usuarios.findByCodigo(codigo);
 		modelAndView.addObject("usuario", usuario);
 		modelAndView.addObject("setores", Setor.values());
-		modelAndView.addObject("pgrupos", grupoDao.buscarTodos());
+		modelAndView.addObject("pgrupos", grupos.findAll());
 		
 		return modelAndView;
 	}
 	
-	@RequestMapping(value="/excluir/{id}")
-	public ModelAndView exclusao(@PathVariable("id") Long codigo) {
+	@RequestMapping(value="/excluir/{codigo}")
+	public ModelAndView exclusao(@PathVariable("codigo") Long codigo) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/usuarios/listar");
 		
-		Usuario usuario = usuarioDAO.buscaPorId(codigo);
-		usuarioDAO.excluir(usuario);
+		Usuario usuario = usuarios.findByCodigo(codigo);
+		usuarioService.excluir(usuario);
 		
 		return modelAndView;
 	}

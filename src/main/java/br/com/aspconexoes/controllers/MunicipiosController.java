@@ -1,5 +1,7 @@
 package br.com.aspconexoes.controllers;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -20,10 +22,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.aspconexoes.controllers.page.PageWrapper;
-import br.com.aspconexoes.daos.MunicipioDAO;
 import br.com.aspconexoes.models.Municipio;
 import br.com.aspconexoes.repository.Municipios;
-import br.com.aspconexoes.service.CadastroMunicipioService;
+import br.com.aspconexoes.service.MunicipioService;
 import br.com.aspconexoes.service.exception.NomeMunicipioCadastradoException;
 import br.com.aspconexoes.validation.MunicipioValidator;
 
@@ -32,10 +33,7 @@ import br.com.aspconexoes.validation.MunicipioValidator;
 public class MunicipiosController {
 	
 	@Autowired
-	private MunicipioDAO municipioDao;
-	
-	@Autowired
-	private CadastroMunicipioService cadastroMunicipioService;
+	private MunicipioService municipioService;
 	
 	@Autowired
 	private Municipios municipios;
@@ -77,7 +75,7 @@ public class MunicipiosController {
 		}
 		
 		try {
-			jaCadastrado = cadastroMunicipioService.salvar(municipio);
+			jaCadastrado = municipioService.salvar(municipio);
 		} catch (NomeMunicipioCadastradoException e) {
 			result.rejectValue("nome", e.getMessage(), e.getMessage());
 			return form(municipio);
@@ -85,7 +83,7 @@ public class MunicipiosController {
 		
 		if(jaCadastrado == true) {
 			attributes.addFlashAttribute("mensagem", "Município alterado com sucesso");
-			return new ModelAndView("redirect:/municipios/cadastro");
+			return new ModelAndView("redirect:/municipios/");
 		}
 		
 		attributes.addFlashAttribute("mensagem", "Município cadastrado com sucesso");
@@ -116,11 +114,11 @@ public class MunicipiosController {
 	}
 	
 	@RequestMapping("/editar/{id}")
-	public ModelAndView formEditar(@PathVariable("id") Long id, HttpServletRequest httpServletRequest) {
+	public ModelAndView formEditar(@PathVariable("id") Long id) {
 		ModelAndView modelAndView = new ModelAndView("municipios/inserirMunicipio");
 		
-		Municipio municipio = municipioDao.buscarPorId(id);
-		modelAndView.addObject("municipio", municipio);
+		Optional<Municipio> municipio = municipios.findById(id);
+		modelAndView.addObject("municipio", municipio.get());
 		return modelAndView;
 	}
 	
@@ -129,8 +127,8 @@ public class MunicipiosController {
 	public ModelAndView exclusao(@PathVariable("id") Long id) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/municipios/");
 		
-		Municipio municipio = municipioDao.buscarPorId(id);	
-		municipioDao.excluir(municipio);		
+		Optional<Municipio> municipio = municipios.findById(id);	
+		municipioService.excluir(municipio.get());
 		
 		return modelAndView;
 	}

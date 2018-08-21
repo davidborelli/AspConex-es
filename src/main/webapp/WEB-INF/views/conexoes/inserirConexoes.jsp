@@ -10,7 +10,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>AspConexões | Cadastrar conexão</title>
+	<c:if test="${conexao.getId() == null}"><title>AspConexões | Cadastrar conexão</title></c:if>
+	<c:if test="${conexao.getId() != null}"><title>AspConexões | Editar conexão</title></c:if>
+	
 	<c:url value="/resources/img" var="imgPath" />
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css">
@@ -26,12 +28,14 @@
 	<div class="container">
 		<ol class="breadcrumb">
 			<li><a href="${contextPath}">Início</a></li>
-			<li class="active">Cadastros</li>
+			<c:if test="${conexao.getId() == null}"><li class="active">Cadastros</li></c:if>
+			<c:if test="${conexao.getId() != null}"><li class="active">Editar</li></c:if>
 			<li class="active">Conexão</li>
 		</ol>
 		
 		<div class="page-header">
-			<h1>Cadastrar Conexão</h1>
+			<c:if test="${conexao.getId() == null}"><h1>Cadastrar Conexão</h1></c:if>
+			<c:if test="${conexao.getId() != null}"><h1>Editar Conexão</h1></c:if>
 		</div>
 		
 		<c:forEach items="${mensagem}" var="msg">
@@ -54,6 +58,8 @@
 					</ul>
 				</div>
 			</div>
+			
+			<form:hidden path="id" value="${municipio.id }"/>
 			
 			<div class="row  form-group">
 				<div class="col-sm-3  form-group">

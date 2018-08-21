@@ -1,6 +1,9 @@
 package br.com.aspconexoes.service;
 
-import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,17 +13,20 @@ import br.com.aspconexoes.models.Municipio;
 import br.com.aspconexoes.repository.Municipios;
 import br.com.aspconexoes.service.exception.NomeMunicipioCadastradoException;
 
+@Transactional
 @Service
-public class CadastroMunicipioService {
+public class MunicipioService {
+	
+	@PersistenceContext
+	private EntityManager manager;
 
 	@Autowired
 	private Municipios municipios;
 	
-	@Transactional
 	public Boolean salvar(Municipio municipio) {
-		List<Municipio> muni = municipios.pesquisaPorNomeEAtivo(municipio);
+		Optional<Municipio> listMunicipio = municipios.findByNomeIgnoreCase(municipio.getNome());
 		
-		if(!muni.isEmpty()) {
+		if(listMunicipio.isPresent()) {
 			throw new NomeMunicipioCadastradoException("Município já existe");
 		}
 		
@@ -33,6 +39,11 @@ public class CadastroMunicipioService {
 		//Se existir e estiver diferente, salva edição
 		municipios.save(municipio);
 		return true;
+	}
+	
+
+	public void excluir(Municipio municipio) {
+		manager.remove(municipio);
 	}
 	
 }

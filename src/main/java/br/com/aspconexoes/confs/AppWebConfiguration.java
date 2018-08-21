@@ -18,13 +18,11 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import com.google.common.cache.CacheBuilder;
 
 import br.com.aspconexoes.controllers.HomeController;
-import br.com.aspconexoes.daos.ConexaoDAO;
-import br.com.aspconexoes.models.Conexao;
 
 /* 2º Passo da configuração */
 
 @EnableWebMvc //Habilita uso do Spring WebMVC
-@ComponentScan(basePackageClasses= {HomeController.class, Conexao.class, ConexaoDAO.class}) //Falando onde vai estar os controllers
+@ComponentScan(basePackageClasses= {HomeController.class}) //Falando onde vai estar os controllers
 @EnableCaching
 @EnableSpringDataWebSupport //Adiciona suporte para algumas coisas do SpringData, como paginação, Pageable
 public class AppWebConfiguration extends WebMvcConfigurerAdapter {

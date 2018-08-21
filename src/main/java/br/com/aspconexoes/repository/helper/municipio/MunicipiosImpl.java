@@ -92,4 +92,10 @@ public class MunicipiosImpl implements MunicipiosQueries {
 	
 		return new PageImpl<Municipio>(listaMunicipios, pageable, qtdTotalDeItens);
 	}
+
+	@Override
+	public List<Municipio> listaTodosOrdenadoPorNomeEAtivo() {
+		return manager.createQuery("select m from Municipio m where m.ativo = true order by m.nome", Municipio.class)
+				.getResultList();
+	}
 }

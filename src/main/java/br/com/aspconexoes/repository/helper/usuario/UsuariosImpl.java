@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import br.com.aspconexoes.models.Usuario;
 import br.com.aspconexoes.repository.paginacao.PaginacaoUtil;
 
-
 public class UsuariosImpl implements UsuariosQueries {
 	
 	@PersistenceContext
@@ -47,5 +46,20 @@ public class UsuariosImpl implements UsuariosQueries {
 		List<Usuario> listUsuarios = query.setParameter("pNome", "%"+usuario.getNome()+"%").getResultList();
 		
 		return new PageImpl<>(listUsuarios, pageable, qtdItens);
+	}
+
+	@Override
+	public List<Usuario> findByEmailIgnoreCase(String email) {
+		List<Usuario> opUsuarios = manager.createQuery(
+				"select u from Usuario u where u.email = :pEmail", Usuario.class)
+				.setParameter("pEmail", email).getResultList();
+		return opUsuarios;
+	}
+
+	@Override
+	public List<String> permissoes(Usuario usuario) {
+		return manager.createQuery("select p.nome from Permissao p where grupo_codigo = :pGrupoUsuario", String.class)
+				.setParameter("pGrupoUsuario", usuario.getGrupo())
+				.getResultList();
 	}
 }

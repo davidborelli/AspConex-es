@@ -10,8 +10,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-
-	<title>AspConexões | Inserir usuário</title>
+	<c:if test="${usuario.getCodigo() == null}"><title>AspConexões | Inserir usuário</title></c:if>
+	<c:if test="${usuario.getCodigo() != null}"><title>AspConexões | Editar usuário</title></c:if>
+	
 	<c:url value="/resources/img" var="imgPath" />
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/bootstrap.min.css">
@@ -27,13 +28,13 @@
 	<div class="container">
 		<ol class="breadcrumb">
 			<li><a href="${contextPath}">Início</a></li>
-			<li class="active">Inserir</li>
+			<c:if test="${usuario.getCodigo() == null}"><li class="active">Inserir</li></c:if>
+			<c:if test="${usuario.getCodigo() != null}"><li class="active">Editar</li></c:if>
 			<li class="active">Usuário</li>
 		</ol>
 		
-		<div class="page-header">
-			<h1>Inserir usuário</h1>
-		</div>
+		<c:if test="${usuario.getCodigo() == null}"><div class="page-header"><h1>Inserir usuário</h1></div></c:if>
+		<c:if test="${usuario.getCodigo() != null}"><div class="page-header"><h1>Editar usuário</h1></div></c:if>
 		
 		<c:forEach items="${mensagem}" var="msg">
 				<div class="alert alert-success"> <!--succes | warning | info-->
