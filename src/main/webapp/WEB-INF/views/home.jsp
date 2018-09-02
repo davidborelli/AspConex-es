@@ -24,6 +24,9 @@
 	
 	<link rel="shortcut icon" href="${imgPath}/favicon.png" />
 	
+	<meta name="_csrf" content="${_csrf.token}"/>
+	<meta name="_csrf_header" content="${_csrf.headerName}"/>
+	
 </head>
 <body>
 	<jsp:include page="/resources/templates/navbar.jsp" />
@@ -65,7 +68,7 @@
 							<div class="panel-title">
 							<table>
 							   <tr>
-								   <td class="tituloMuni">${municipio.nome}</td>
+								   <td class="tituloMunicipio" id="${municipio.id}">${municipio.nome}</td>
 								   <td class="tituloMuni  text-right">0/${municipio.conexoes.size()}</td>
 							   </tr>
 							</table>
@@ -160,7 +163,7 @@
 	    </div>	
 	</footer>
 	
-	<script src="<%=request.getContextPath()%>/resources/js/jquery-1.12.3.min.js"></script>
+	<script src="<%=request.getContextPath()%>/resources/js/jquery-2.1.1.min.js"></script>
 	<script src="<%=request.getContextPath()%>/resources/js/bootstrap.min.js"></script>
 	<script src="<%=request.getContextPath()%>/resources/js/main.js"></script>
 </body>

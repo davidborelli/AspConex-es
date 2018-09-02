@@ -1,6 +1,7 @@
 package br.com.aspconexoes.service;
 
-import java.util.Optional;
+import java.util.List;
+>>>>>>> Início implementação AJAX na página principal
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,9 +25,9 @@ public class MunicipioService {
 	private Municipios municipios;
 	
 	public Boolean salvar(Municipio municipio) {
-		Optional<Municipio> listMunicipio = municipios.findByNomeIgnoreCase(municipio.getNome());
+		List<Municipio> listMunicipio = municipios.buscaMunicipioEdicao(municipio);
 		
-		if(listMunicipio.isPresent()) {
+		if(!listMunicipio.isEmpty()) {
 			throw new NomeMunicipioCadastradoException("Município já existe");
 		}
 		

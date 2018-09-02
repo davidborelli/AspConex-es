@@ -19,6 +19,10 @@
 		
 		<!-- Spring DATA JPA -->
 		<spring-data-jpa.version>1.10.2.RELEASE</spring-data-jpa.version>
+		
+		<!-- Jackson - JSON -->
+		<jackson-core.version>2.7.5</jackson-core.version>
+		
 	</properties>
 
 	<dependencies>
@@ -181,5 +185,12 @@
 			<version>4.1.0.RELEASE</version>
 		</dependency>
 		
+		<!-- Jackson - JSON -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-core.version}</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 </project>

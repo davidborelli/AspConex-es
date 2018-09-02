@@ -31,10 +31,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+			.csrf().disable()
 			.authorizeRequests()
 				.antMatchers("/municipios/hbuscarMunicipio/**").authenticated()
 				.antMatchers("/municipios/buscarMunicipio/**").authenticated()
 				.antMatchers("/municipios/").authenticated()
+				.antMatchers("/conexoes/pesquisa").authenticated()
 				.antMatchers("/conexoes/**").hasRole("ADMINISTRADOR")
 				.antMatchers("/municipios/**").hasRole("ADMINISTRADOR")
 				.antMatchers("/usuarios/**").hasRole("ADMINISTRADOR")

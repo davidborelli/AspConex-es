@@ -15,4 +15,5 @@ public interface MunicipiosQueries {
 	public Page<Municipio> listaTodosOrdenadoPorNomeEAtivo(Pageable pageable);
 	public List<Municipio> pesquisaPorNomeEAtivo(Municipio municipio);
 	public List<Municipio> listaTodosOrdenadoPorNomeEAtivo();
+	public List<Municipio> buscaMunicipioEdicao(Municipio municipio);
 }

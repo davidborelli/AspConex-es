@@ -98,4 +98,12 @@ public class MunicipiosImpl implements MunicipiosQueries {
 		return manager.createQuery("select m from Municipio m where m.ativo = true order by m.nome", Municipio.class)
 				.getResultList();
 	}
+
+	@Override
+	public List<Municipio> buscaMunicipioEdicao(Municipio municipio) {
+		return manager.createQuery("select m from Municipio m where m.id <> :pId and m.nome = :pNome", Municipio.class)
+				.setParameter("pId", municipio.getId())
+				.setParameter("pNome", municipio.getNome())
+				.getResultList();
+	}
 }

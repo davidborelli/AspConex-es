@@ -6,13 +6,15 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,7 +25,6 @@ import br.com.aspconexoes.repository.Conexoes;
 import br.com.aspconexoes.repository.Municipios;
 import br.com.aspconexoes.service.ConexaoService;
 import br.com.aspconexoes.service.exception.ConexaoComMesmoIdIpCadastradoException;
-import br.com.aspconexoes.validation.ConexaoValidator;
 
 @Controller
 @RequestMapping("/conexoes")
@@ -38,10 +39,10 @@ public class ConexoesController {
 	@Autowired
 	private Conexoes conexoes;
 	
-	@InitBinder
+	/*@InitBinder
 	public void InitBinder(WebDataBinder binder) {
 		binder.addValidators(new ConexaoValidator());
-	}
+	}*/
 	
 	@RequestMapping("/cadastro")
 	public ModelAndView form(Conexao conexao) {		
@@ -111,4 +112,17 @@ public class ConexoesController {
 			
 		return modelAndView;
 	}	
+
+	
+	@RequestMapping(value="/pesquisa", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
+	public @ResponseBody ResponseEntity<?> pesquisar(@RequestBody Municipio municipio){
+		
+		Long idMuni = municipio.getId();
+		List<Conexao> listaConexoes = conexoes.findByMunicipio(idMuni);
+		
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> Id recebido: " + idMuni);
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> Qtd de Conexoes encontradas: " + listaConexoes.size());		
+		
+		return ResponseEntity.ok(listaConexoes);
+	}
 }

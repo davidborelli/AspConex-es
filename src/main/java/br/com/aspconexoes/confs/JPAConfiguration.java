@@ -49,7 +49,7 @@ public class JPAConfiguration {
 		/* Configurando algumas propriedades do Hibernate */
 		Properties props = new Properties();
 		props.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-		props.setProperty("hibernate.show_sql", "true");
+		props.setProperty("hibernate.show_sql", "false");
 		props.setProperty("hibernate.hbm2ddl.auto", "update"); /*hbm = Hibernate Mapping to Data Definition Language*/
 		props.setProperty("hibernate.format_sql", "true"); //Formatar a SQL
 		

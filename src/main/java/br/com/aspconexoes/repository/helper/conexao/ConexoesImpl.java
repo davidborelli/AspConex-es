@@ -34,4 +34,10 @@ public class ConexoesImpl implements ConexoesQueries {
 				.getResultList();
 	}
 
+	@Override
+	public List<Conexao> findByMunicipio(Long id) {
+		return manager.createQuery("select c from Conexao c where c.municipio_id = :pMuni", Conexao.class)
+				.setParameter("pMuni", id)
+				.getResultList();
+	}
 }

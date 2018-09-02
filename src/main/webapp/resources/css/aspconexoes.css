@@ -16,6 +16,11 @@ a.lblTitleNomeMuni:link {
 	text-decoration: none;
 }
 
+td.tituloMunicipio {
+    padding: 0px;
+    width: 100%;
+}
+
 td.tituloMuni {
     padding: 0px;
     width: 100%;
