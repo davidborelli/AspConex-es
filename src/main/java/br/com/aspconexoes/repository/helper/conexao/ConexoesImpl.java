@@ -28,16 +28,16 @@ public class ConexoesImpl implements ConexoesQueries {
 				+ " where c.id          <> :pId and "
 				+ "		  c.id_ip        = :pId_ip and "
 				+ "		  c.municipio.id = :pMuni ", Conexao.class)
-				.setParameter("pId", conexao.getId())
+				.setParameter("pId",    conexao.getId())
 				.setParameter("pId_ip", conexao.getId_ip())
-				.setParameter("pMuni", conexao.getMunicipio().getId())
+				.setParameter("pMuni",  conexao.getMunicipio().getId())
 				.getResultList();
 	}
 
 	@Override
-	public List<Conexao> findByMunicipio(Long id) {
-		return manager.createQuery("select c from Conexao c where c.municipio_id = :pMuni", Conexao.class)
-				.setParameter("pMuni", id)
+	public List<Conexao> findByMunicipio(Municipio municipio) {
+		return manager.createQuery("select c from Conexao c where c.municipio.id = :pMuni", Conexao.class)
+				.setParameter("pMuni", municipio.getId())
 				.getResultList();
 	}
 }

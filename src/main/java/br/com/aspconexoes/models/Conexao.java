@@ -99,8 +99,8 @@ public class Conexao implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Conexao [id=" + id + ", senha=" + senha + ", porta=" + porta + ", id_ip=" + id_ip + ", usuario="
-				+ usuario + ", tipo=" + tipo + ", municipio=" + municipio + "]";
+		return "Conexao [senha=" + senha + ", porta=" + porta + ", id_ip=" + id_ip + ", usuario=" + usuario + ", tipo="
+				+ tipo + "]";
 	}
 
 	@Override

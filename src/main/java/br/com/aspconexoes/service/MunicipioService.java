@@ -1,7 +1,6 @@
 package br.com.aspconexoes.service;
 
 import java.util.List;
->>>>>>> Início implementação AJAX na página principal
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -41,7 +40,6 @@ public class MunicipioService {
 		municipios.save(municipio);
 		return true;
 	}
-	
 
 	public void excluir(Municipio municipio) {
 		manager.remove(municipio);

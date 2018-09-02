@@ -40,10 +40,8 @@ public class AppUserDetailsService implements UserDetailsService {
 		List<String> listPermissoes = usuarios.permissoes(usuario);
 		
 		/* Para cada persmissão da lista adiciona em authorities */
-
 		listPermissoes.forEach(p -> authorities.add(new SimpleGrantedAuthority(p)));
 		
 		return authorities;
 	}
-
 }

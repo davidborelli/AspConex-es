@@ -9,5 +9,5 @@ public interface ConexoesQueries {
 	
 	public List<Municipio> buscaConexoesAtivas();
 	public List<Conexao> findById_ip(Conexao conexao);
-	public List<Conexao> findByMunicipio(Long id);
+	public List<Conexao> findByMunicipio(Municipio municipio);
 }

@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,17 +19,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import br.com.aspconexoes.models.Conexao;
 import br.com.aspconexoes.models.Municipio;
 import br.com.aspconexoes.models.TipoConexao;
 import br.com.aspconexoes.repository.Conexoes;
 import br.com.aspconexoes.repository.Municipios;
+import br.com.aspconexoes.ressources.ConexoesRessource;
 import br.com.aspconexoes.service.ConexaoService;
 import br.com.aspconexoes.service.exception.ConexaoComMesmoIdIpCadastradoException;
 
+@ComponentScan(basePackageClasses = ConexoesRessource.class)
 @Controller
 @RequestMapping("/conexoes")
 public class ConexoesController {
+	
+	@Autowired
+	private ConexoesRessource conexoesRessource;
 	
 	@Autowired
 	private ConexaoService conexaoService;
@@ -112,17 +120,13 @@ public class ConexoesController {
 			
 		return modelAndView;
 	}	
-
 	
 	@RequestMapping(value="/pesquisa", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
-	public @ResponseBody ResponseEntity<?> pesquisar(@RequestBody Municipio municipio){
+	public @ResponseBody ResponseEntity<?> pesquisar(@RequestBody Municipio municipio) throws JsonProcessingException{
 		
-		Long idMuni = municipio.getId();
-		List<Conexao> listaConexoes = conexoes.findByMunicipio(idMuni);
+		String JSONconexoes = conexoesRessource.conexoesToJSON(municipio);
 		
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> Id recebido: " + idMuni);
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> Qtd de Conexoes encontradas: " + listaConexoes.size());		
-		
-		return ResponseEntity.ok(listaConexoes);
+		return ResponseEntity.badRequest().body(JSONconexoes);
+		//return ResponseEntity.ok(listaConexaoesJSON);
 	}
 }

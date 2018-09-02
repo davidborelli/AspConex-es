@@ -16,13 +16,13 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.security.version>4.2.6.RELEASE</spring.security.version>
-		
+
 		<!-- Spring DATA JPA -->
 		<spring-data-jpa.version>1.10.2.RELEASE</spring-data-jpa.version>
-		
+
 		<!-- Jackson - JSON -->
 		<jackson-core.version>2.7.5</jackson-core.version>
-		
+
 	</properties>
 
 	<dependencies>
@@ -98,14 +98,14 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>5.1.0.Final</version>
 		</dependency>
-		
+
 		<dependency>
-    		<groupId>org.hibernate</groupId>
-    		<artifactId>hibernate-java8</artifactId>
-    		<version>5.1.0.Final</version>
-    		<scope>compile</scope>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+			<version>5.1.0.Final</version>
+			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -163,7 +163,7 @@
 			<artifactId>spring-security-core</artifactId>
 			<version>${spring.security.version}</version>
 		</dependency>
-		
+
 		<!-- Spring DATA JPA -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
@@ -171,20 +171,20 @@
 			<version>${spring-data-jpa.version}</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<!-- Cache Google Guava -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>18.0</version>
 		</dependency>
-		 <!-- Faz integração do Guava com o Spring -->
+		<!-- Faz integração do Guava com o Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>4.1.0.RELEASE</version>
 		</dependency>
-		
+
 		<!-- Jackson - JSON -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -192,5 +192,13 @@
 			<version>${jackson-core.version}</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+			<version>2.0</version>
+		</dependency>
+		
 	</dependencies>
 </project>
